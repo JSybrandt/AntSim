@@ -26,16 +26,8 @@
 //                  Constants
 //-----------------------------------------------
 // graphic images
-//const char BACKGROUND_IMAGE[] = "pictures\\background.jpg";  // photo source NASA/courtesy of nasaimages.org 
-//const char PLANET_IMAGE[] = "pictures\\sun1.png"; // picture of planet
-//const char MISSILE_IMAGE[] = "pictures\\missile.png"; //More CC3 and something else
-//const char MARS_IMAGE[] = "pictures\\mars.png";	//CC3 art
-//const char EARTH_IMAGE[] = "pictures\\earth.png";	//CC3 art
-//const char EXP_IMAGE[] = "pictures\\explosion.png"; //Public Domain
-//const char CURSOR_IMAGE[] = "pictures\\cursor.png";
-//const char SMOKE_IMAGE[] = "pictures\\smoke.png";
-//const char SHOT_IMAGE[] = "pictures\\shot.png";
-//const char BAR_IMAGE[] = "pictures\\bar.png";
+const char ANT_IMAGE[] = "pictures\\ant.png";
+
 
 //Sound Locations
 const char WAVE_BANK[] = "audio\\Win\\Wave Bank.xwb";
