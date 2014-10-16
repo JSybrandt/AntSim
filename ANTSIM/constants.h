@@ -27,6 +27,7 @@
 //-----------------------------------------------
 // graphic images
 const char ANT_IMAGE[] = "pictures\\ant.png";
+const char HILL_IMAGE[] = "pictures\\antHill.png";
 
 
 //Sound Locations

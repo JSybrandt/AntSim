@@ -36,6 +36,9 @@ void AntSim::initialize(HWND hwnd)
 	if(!antTex.initialize(graphics,ANT_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ant texture"));
 
+	if(!hillTex.initialize(graphics,HILL_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ant texture"));
+
 	for(int i = 0 ; i < antSimNS::MAX_ANTS; i++)
 	{
 		ants[i].initialize(this,0,0,0,&antTex);
@@ -45,6 +48,9 @@ void AntSim::initialize(HWND hwnd)
 	{
 		ants[antIndex].create(VECTOR2(GAME_WIDTH/2,GAME_HEIGHT/2));
 	}
+
+	base.initialize(this,64,64,0,&hillTex);
+	base.setCenterLocation(VECTOR2(GAME_WIDTH/2,GAME_HEIGHT/2));
 
 	return;
 }
@@ -82,11 +88,13 @@ void AntSim::collisions()
 void AntSim::render()
 {
 	graphics->spriteBegin();                // begin drawing sprites
-		
+
 	for(int i = 0 ; i < antSimNS::MAX_ANTS; i++)
 	{
 		ants[i].draw();
 	}
+
+	base.draw();
 
 	graphics->spriteEnd();                  // end drawing sprites	
 

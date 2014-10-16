@@ -5,6 +5,7 @@
 #include "ctime"
 
 #include "ant.h"
+#include "colony.h"
 
 namespace antSimNS
 {
@@ -16,7 +17,9 @@ class AntSim: public Game
 {
 private:
 	TextureManager antTex;
+	TextureManager hillTex;
 	Ant ants[antSimNS::MAX_ANTS];
+	Colony base;
 	int antIndex;
 
 public:
