@@ -192,8 +192,8 @@ class Actor : public Image
     // Adds the gravitational force to the velocity vector of this Actor
     void virtual gravityForce(Actor *other, float frameTime);
 	
-	
-	void virtual explosion();
+	//called when two actors touch
+	virtual void touches(Actor * other){};
 };
 
 #endif

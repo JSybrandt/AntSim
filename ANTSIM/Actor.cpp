@@ -457,7 +457,3 @@ void Actor::gravityForce(Actor *ent, float frameTime)
     // Add gravity vector to moving velocity vector to change direction
     velocity += gravityV;
 }
-
-void Actor::explosion() {
-
-}

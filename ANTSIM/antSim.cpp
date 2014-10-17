@@ -85,6 +85,16 @@ void AntSim::update()
 		ants[i].update(frameTime);
 	}
 
+	for(int i = 0 ; i < antSimNS::MAX_FOOD; i++)
+	{
+		food[i].update(frameTime);
+	}
+
+	for(int i = 0 ; i < antSimNS::MAX_PHEROMONE; i++)
+	{
+		pheromones[i].update(frameTime);
+	}
+
 	if(input->getMouseLButton())
 	{
 		if(!clickedLastFrame)
@@ -118,9 +128,13 @@ void AntSim::ai()
 void AntSim::collisions()
 {
 	VECTOR2 collision;
-	for(int i = 0 ; i < antSimNS::MAX_PHEROMONE; i++)
+	
+	//lopp ants
+	for(int j = 0; j < antSimNS::MAX_ANTS; j++)
 	{
-		for(int j = 0; j < antSimNS::MAX_ANTS; j++)
+
+		//check ants with pheromone
+		for(int i = 0 ; i < antSimNS::MAX_PHEROMONE; i++)
 		{
 			//if an ant is in range of the pheromone
 			if(pheromones[i].collidesWith(ants[j],collision))
@@ -128,6 +142,27 @@ void AntSim::collisions()
 				ants[j].receiveSignal(pheromones[i].getSignal());
 			}
 		}
+
+		//check ant with food
+		for(int i = 0 ; i < antSimNS::MAX_FOOD; i++)
+		{
+			//if an ant is in range of the pheromone
+			if(ants[i].collidesWith(food[j],collision))
+			{
+				ants[i].touches(&food[j]);
+			}
+		}
+
+		for(int i = 0; i < antSimNS::MAX_ANTS; i++)
+		{
+			if(ants[i].collidesWith(ants[j],collision))
+			{
+				ants[i].touches(&ants[j]);
+				ants[j].touches(&ants[i]);
+			}
+		}
+
+
 	}
 
 }

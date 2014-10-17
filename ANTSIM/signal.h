@@ -12,10 +12,14 @@ enum SignalType
 class Signal
 {
 public:
-	Signal(){type=SignalType::null;}
-	Signal(SignalType t,VECTOR2 l){data=l;type=t;};
+	Signal(){type=SignalType::null;data=VECTOR2(-1,-1);priority=-1;}
+	Signal(SignalType t,VECTOR2 l, float p=1){data=l;type=t;priority = p;};
+	SignalType getType(){return type;}
+	VECTOR2 getData(){return data;}
+	float getPriority(){return priority;};
 private:
 	//signals tell ants about a location
 	VECTOR2 data;
 	SignalType type;
+	float priority;
 };

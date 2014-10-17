@@ -11,10 +11,11 @@
 
 namespace antSimNS
 {
+	
+	const int MAX_PHEROMONE = 2000;
 	const int MAX_ANTS = 1000;
 	const int MAX_FOOD = 1000;
-	const int STARTING_ANTS = 100;
-	const int MAX_PHEROMONE = 1000;
+	const int STARTING_ANTS = 10;
 }
 
 class AntSim: public Game
@@ -49,5 +50,5 @@ public:
 
 	void spawnAnt(VECTOR2 loc);
 	void spawnFood(VECTOR2 loc);
-	void spawnPher(VECTOR2 loc, Signal d);
+	void spawnPher(VECTOR2 loc, Signal s);
 };
