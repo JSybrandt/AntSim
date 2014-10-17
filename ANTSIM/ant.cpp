@@ -13,6 +13,7 @@ Ant::Ant():Actor()
 	signalIndex = 0;
 	behavior = Behavior::DEFAULT;
 	cooldown = 0;
+	name = "Ant";
 }
 
 Ant::~Ant()

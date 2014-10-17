@@ -62,4 +62,13 @@ public:
 	float receiveFood(float avalible);
 
 	Behavior getBehavior(){return behavior;}
+
+	// Return food level;
+	virtual float getFood()			const {return foodLevel;}
+
+	// Return age;
+	virtual float getAge()			const {return age;}
+	
+	// Return name;
+	virtual std::string getName()			const {return name;}
 };

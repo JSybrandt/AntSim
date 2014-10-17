@@ -24,6 +24,9 @@ class Actor : public Image
 	Image img;
     COLLISION_TYPE collisionType;
     VECTOR2 center;         // center of Actor
+	std::string name;
+	//float foodLevel;
+	//float age;
     float   radius;         // radius of collision circle
     VECTOR2 distSquared;    // used for calculating circle collision
     float   sumRadiiSquared;
@@ -115,6 +118,14 @@ class Actor : public Image
     // Return health;
     virtual float getHealth()         const {return health;}
 
+	// Return food;
+	virtual float getFood()			const {return 0;}
+
+	// Return age;
+	virtual float getAge()			const {return 0;}
+
+	// Return name;
+	virtual std::string getName()			const {return "BAD";}
     // Return collision type (NONE, CIRCLE, BOX, ROTATED_BOX)
     virtual COLLISION_TYPE getCollisionType() {return collisionType;}
 

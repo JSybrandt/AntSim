@@ -50,9 +50,11 @@ void Pheromone::update(float frameTime)
 
 		//makes circle shrink
 		radius -= pheromoneNS::DISSIPATION_RATE * frameTime;
+		if(radius <= pheromoneNS::MIN_RADIUS) radius = pheromoneNS::MIN_RADIUS;
 		setScale(1);
 		setScale(radius*2/getWidth());
 		setCenterLocation(trueCenter);
+
 
 	}
 }

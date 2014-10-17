@@ -19,6 +19,7 @@ namespace pheromoneNS{
 	const float DEFAULT_LIFESPAN = 5;
 
 	const float DISSIPATION_RATE = 7;
+	const float MIN_RADIUS = 5;
 };
 
 class Pheromone: public Actor

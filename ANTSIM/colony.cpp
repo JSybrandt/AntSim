@@ -9,6 +9,7 @@ Colony::Colony():Actor()
 	spawn = false;
 	setActive(true);
 	setScale(5);
+	name = "Colony";
 }
 
 Colony::~Colony()
@@ -25,8 +26,8 @@ void Colony::update(float frameTime)
 
 
 		//consume food
-		//foodLevel -= colonyNS::METABOLISM*frameTime;
-		//if(foodLevel < 0) health -= colonyNS::STARVATION_DAMAGE * frameTime;
+		foodLevel -= colonyNS::METABOLISM*frameTime;
+		if(foodLevel < 0) health -= colonyNS::STARVATION_DAMAGE * frameTime;
 
 		//Health, die.
 		if(health <= 0) die();

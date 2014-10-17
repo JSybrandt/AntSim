@@ -11,8 +11,7 @@
 //=============================================================================
 // Constructor
 //=============================================================================
-AntSim::AntSim()
-{
+AntSim::AntSim() {
 	srand((unsigned)time(0)); 
 	antIndex = 0;
 	foodIndex = 0;
@@ -70,6 +69,7 @@ void AntSim::initialize(HWND hwnd)
 
 	base.initialize(this,64,64,0,&hillTex);
 	base.setCenterLocation(VECTOR2(GAME_WIDTH/2,GAME_HEIGHT/2));
+	mouse.initialize(this,input,graphics, 0,0,0);
 
 	return;
 }
@@ -113,6 +113,7 @@ void AntSim::update()
 		VECTOR2 test(base.getCenterX(),base.getCenterY());
 		spawnAnt(test);
 	}
+	mouse.update(frameTime);
 }
 
 //=============================================================================
@@ -164,6 +165,14 @@ void AntSim::collisions()
 
 
 	}
+	for(int i = 0; i < antSimNS::MAX_ANTS; i++) {
+		if(input->getMouseRButton() && mouse.collidesWith(ants[i],collision)) {
+			mouse.getInfo(ants[i]);
+		}
+	}
+	if(input->getMouseRButton() && mouse.collidesWith(base,collision)) {
+			mouse.getInfo(base);
+	}
 
 }
 
@@ -191,7 +200,10 @@ void AntSim::render()
 		food[i].draw();
 	}
 
-	
+	if(input->getMouseRButton()) {
+		mouse.print();
+	}
+
 
 	graphics->spriteEnd();                  // end drawing sprites	
 
