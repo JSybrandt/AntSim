@@ -19,14 +19,18 @@ class Colony: public Actor
 private:
 	float age;
 	AntSim* world;
+	float birthRate;
+	float resetRate;
 	float foodLevel;		//amount of food in the colony
 	bool alive;
+	bool spawn;
 public:
 	Colony();
 	~Colony();
 	void update(float frameTime);
 	void draw();
 	void create(VECTOR2 location);
+	bool getSpawn() { return spawn;}
 	bool initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM);
 	void die();
 };

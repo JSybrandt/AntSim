@@ -79,6 +79,7 @@ void AntSim::initialize(HWND hwnd)
 //=============================================================================
 void AntSim::update()
 {
+
 	for(int i = 0 ; i < antSimNS::MAX_ANTS; i++)
 	{
 		ants[i].update(frameTime);
@@ -95,6 +96,13 @@ void AntSim::update()
 	}
 	else clickedLastFrame = false;
 
+
+	base.update(frameTime);
+
+	if(base.getSpawn()) {
+		VECTOR2 test(base.getCenterX(),base.getCenterY());
+		spawnAnt(test);
+	}
 }
 
 //=============================================================================

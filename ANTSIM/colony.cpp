@@ -3,8 +3,10 @@
 Colony::Colony():Actor()
 {
 	age = 0;
+	resetRate = .05;
 	foodLevel = colonyNS::STOMACH_SIZE;
 	alive = true;
+	spawn = false;
 	setActive(true);
 	setScale(5);
 }
@@ -19,19 +21,28 @@ void Colony::update(float frameTime)
 	{
 		//age
 		age += frameTime;
-		if(age > colonyNS::LIFE_EXPECTANCY) health -= colonyNS::OLD_AGE_DAMAGE * frameTime;
-		
-		
+		//if(age > colonyNS::LIFE_EXPECTANCY) health -= colonyNS::OLD_AGE_DAMAGE * frameTime;
+
+
 		//consume food
-		foodLevel -= colonyNS::METABOLISM*frameTime;
-		if(foodLevel < 0) health -= colonyNS::STARVATION_DAMAGE * frameTime;
-		
+		//foodLevel -= colonyNS::METABOLISM*frameTime;
+		//if(foodLevel < 0) health -= colonyNS::STARVATION_DAMAGE * frameTime;
+
 		//Health, die.
 		if(health <= 0) die();
 
-		
+		if(birthRate > 0)
+		{
+			spawn = false;
+			birthRate -= frameTime;
+		}
+		if(birthRate < 0) { 
+			birthRate = resetRate;
+			spawn = true;
+		}
 
 	}
+
 }
 
 void Colony::draw()
