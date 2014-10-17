@@ -6,11 +6,15 @@
 
 #include "ant.h"
 #include "colony.h"
+#include "food.h"
+#include "pheromone.h"
 
 namespace antSimNS
 {
-	const int MAX_ANTS = 10000;
+	const int MAX_ANTS = 1000;
+	const int MAX_FOOD = 1000;
 	const int STARTING_ANTS = 100;
+	const int MAX_PHEROMONE = 1000;
 }
 
 class AntSim: public Game
@@ -18,9 +22,17 @@ class AntSim: public Game
 private:
 	TextureManager antTex;
 	TextureManager hillTex;
+	TextureManager foodTex;
+	TextureManager pherTex;
 	Ant ants[antSimNS::MAX_ANTS];
+	Food food[antSimNS::MAX_FOOD];
+	Pheromone pheromones[antSimNS::MAX_PHEROMONE];
 	Colony base;
 	int antIndex;
+	int foodIndex;
+	int pherIndex;
+
+	bool clickedLastFrame; 
 
 public:
 	AntSim();
@@ -36,4 +48,6 @@ public:
     void resetAll();
 
 	void spawnAnt(VECTOR2 loc);
+	void spawnFood(VECTOR2 loc);
+	void spawnPher(VECTOR2 loc, Signal d);
 };

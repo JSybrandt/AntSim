@@ -28,7 +28,8 @@
 // graphic images
 const char ANT_IMAGE[] = "pictures\\ant.png";
 const char HILL_IMAGE[] = "pictures\\antHill.png";
-
+const char FOOD_IMAGE[] = "pictures\\food.png";
+const char PHEROMONE_IMAGE[] = "pictures\\pheromone.png";
 
 //Sound Locations
 const char WAVE_BANK[] = "audio\\Win\\Wave Bank.xwb";

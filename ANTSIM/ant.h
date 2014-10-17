@@ -1,6 +1,6 @@
 #pragma once
 #include "Actor.h"
-
+#include "signal.h"
 class AntSim;
 
 namespace antNS
@@ -13,11 +13,6 @@ namespace antNS
 	const float ANT_SPEED = 50;
 	const float ANT_MAX_HEALTH = 100;
 }
-
-enum Behaviour
-{
-
-};
 
 class Ant: public Actor
 {
@@ -37,4 +32,5 @@ public:
 	void create(VECTOR2 location);
 	bool initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM);
 	void die();
+	void receiveSignal(Signal s);
 };

@@ -93,10 +93,12 @@
     <ClCompile Include="audio.cpp" />
     <ClCompile Include="colony.cpp" />
     <ClCompile Include="constants.cpp" />
+    <ClCompile Include="food.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="pheromone.cpp" />
     <ClCompile Include="textDX.cpp" />
     <ClCompile Include="textureManager.cpp" />
     <ClCompile Include="winmain.cpp" />
@@ -108,11 +110,14 @@
     <ClInclude Include="audio.h" />
     <ClInclude Include="colony.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="food.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameError.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="pheromone.h" />
+    <ClInclude Include="signal.h" />
     <ClInclude Include="textDX.h" />
     <ClInclude Include="textureManager.h" />
   </ItemGroup>

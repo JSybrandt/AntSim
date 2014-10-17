@@ -82,3 +82,8 @@ void Ant::die()
 	alive = false;
 	setActive(false);
 }
+
+void Ant::receiveSignal(Signal s)
+{
+	//TODO: change behavior based on signal;
+}

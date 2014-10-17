@@ -57,19 +57,16 @@ class Image
     virtual float getScale()    {return spriteData.scale;}
 
     // Return width.
-    virtual int   getWidth()    {return spriteData.width;}
+    virtual int   getWidth()    {return spriteData.width*getScale();}
 
     // Return height.
-    virtual int   getHeight()   {return spriteData.height;}
+    virtual int   getHeight()   {return spriteData.height*getScale();}
 
     // Return center X.
     virtual float getCenterX()      {return spriteData.x + spriteData.width/2*getScale();}
 
     // Return center Y.
     virtual float getCenterY()      {return spriteData.y + spriteData.height/2*getScale();}
-
-	virtual void setCenterX(float x){spriteData.x = x - spriteData.width/2*getScale();}
-	virtual void setCenterY(float y){spriteData.y = y - spriteData.height/2*getScale();}
 
     // Return rotation angle in degrees.
     virtual float getDegrees()      {return spriteData.angle*(180.0f/(float)PI);}
@@ -107,6 +104,10 @@ class Image
 
     // Set Y location.
     virtual void setY(float newY)   {spriteData.y = newY;}
+
+	virtual void setCenterX(float x){spriteData.x = x - spriteData.width/2*getScale();}
+
+	virtual void setCenterY(float y){spriteData.y = y - spriteData.height/2*getScale();}
 
     // Set scale.
     virtual void setScale(float s)  {spriteData.scale = s;}

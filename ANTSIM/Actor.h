@@ -127,7 +127,7 @@ class Actor : public Image
 	//let location
 	void setLocation(VECTOR2 v)			{setX(v.x);setY(v.y);}
 
-	void setCenterLocation(VECTOR2 v)			{setCenterX(v.x);setCenterY(v.y);}
+	void setCenterLocation(VECTOR2 v)		{setCenterX(v.x);setCenterY(v.y);}
 
     // Set velocity.
     virtual void  setVelocity(VECTOR2 v)    {velocity = v;}
@@ -136,7 +136,7 @@ class Actor : public Image
     virtual void  setDeltaV(VECTOR2 dv)     {deltaV = dv;}
 
     // Set active.
-    virtual void  setActive(bool a)         {active = a;}
+    virtual void  setActive(bool a)         {active = a;visible = a;}
 
     // Set health.
     virtual void setHealth(float h)         {health = h;}
