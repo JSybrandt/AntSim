@@ -8,6 +8,7 @@
 #include "colony.h"
 #include "food.h"
 #include "pheromone.h"
+#include "mouse.h"
 
 namespace antSimNS
 {
@@ -28,6 +29,7 @@ private:
 	Food food[antSimNS::MAX_FOOD];
 	Pheromone pheromones[antSimNS::MAX_PHEROMONE];
 	Colony base;
+	Mouse mouse;
 	int antIndex;
 	int foodIndex;
 	int pherIndex;
@@ -35,6 +37,7 @@ private:
 	bool clickedLastFrame; 
 
 public:
+	
 	AntSim();
 	~AntSim();
 

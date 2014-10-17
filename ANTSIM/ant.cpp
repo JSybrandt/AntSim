@@ -9,6 +9,7 @@ Ant::Ant():Actor()
 	foodLevel = antNS::STOMACH_SIZE;
 	alive = false;
 	setActive(false);
+	name = "Ant";
 }
 
 Ant::~Ant()

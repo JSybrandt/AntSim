@@ -98,6 +98,7 @@
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="mouse.cpp" />
     <ClCompile Include="pheromone.cpp" />
     <ClCompile Include="textDX.cpp" />
     <ClCompile Include="textureManager.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="graphics.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="mouse.h" />
     <ClInclude Include="pheromone.h" />
     <ClInclude Include="signal.h" />
     <ClInclude Include="textDX.h" />

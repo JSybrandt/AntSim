@@ -33,4 +33,13 @@ public:
 	bool initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM);
 	void die();
 	void receiveSignal(Signal s);
+
+	// Return food level;
+	virtual float getFood()			const {return foodLevel;}
+
+	// Return age;
+	virtual float getAge()			const {return age;}
+	
+	// Return name;
+	virtual std::string getName()			const {return name;}
 };
