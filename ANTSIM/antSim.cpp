@@ -60,9 +60,15 @@ void AntSim::initialize(HWND hwnd)
 //=============================================================================
 void AntSim::update()
 {
+
 	for(int i = 0 ; i < antSimNS::MAX_ANTS; i++)
 	{
 		ants[i].update(frameTime);
+	}
+	base.update(frameTime);
+	if(base.getSpawn()) {
+		VECTOR2 test(base.getCenterX(),base.getCenterY());
+		spawnAnt(test);
 	}
 }
 
@@ -89,12 +95,13 @@ void AntSim::render()
 {
 	graphics->spriteBegin();                // begin drawing sprites
 
+	base.draw();
 	for(int i = 0 ; i < antSimNS::MAX_ANTS; i++)
 	{
 		ants[i].draw();
 	}
 
-	base.draw();
+	
 
 	graphics->spriteEnd();                  // end drawing sprites	
 
@@ -122,7 +129,7 @@ void AntSim::resetAll()
 
 void AntSim::spawnAnt(VECTOR2 loc)
 {
-	for(int i = 0 ; i > antSimNS::MAX_ANTS; i++)
+	for(int i = 0 ; i < antSimNS::MAX_ANTS; i++)
 	{
 		//loop index if end is reached
 		if(antIndex >= antSimNS::MAX_ANTS) antIndex = 0;
@@ -131,6 +138,7 @@ void AntSim::spawnAnt(VECTOR2 loc)
 		if(!ants[antIndex].getActive())
 		{
 			ants[antIndex].create(loc);
+			break;
 		}
 
 		antIndex++;
