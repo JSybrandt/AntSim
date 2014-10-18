@@ -37,9 +37,10 @@ private:
 		//~collisionRect(){};
 
 		void addActor(Actor* in);
-		void addActor(Ant* in);
+		void addAnt(Ant* in);
 
 		void checkCollisions();
+		void clear();
 
 	};
 
@@ -85,5 +86,5 @@ public:
 
 	//call for static objects once, call for ants every frame
 	void placeObjectInProperRect(Actor* in);
-	void placeObjectInProperRect(Ant* in);
+	void placeAntObjectInProperRect(Ant* in);
 };

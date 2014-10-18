@@ -137,7 +137,7 @@ void Ant::update(float frameTime)
 			signals[i] = Signal();
 		}
 
-		world->placeObjectInProperRect(this);
+		world->placeAntObjectInProperRect(this);
 
 		if(health <= 0) die();
 

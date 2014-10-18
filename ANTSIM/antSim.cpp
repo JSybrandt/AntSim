@@ -116,8 +116,7 @@ void AntSim::update()
 	base.update(frameTime);
 
 	if(base.getSpawn()) {
-		VECTOR2 test(base.getCenterX(),base.getCenterY());
-		spawnAnt(test);
+		spawnAnt(VECTOR2(base.getCenterX(),base.getCenterY()));
 	}
 	mouse.update(frameTime);
 }
@@ -135,23 +134,24 @@ void AntSim::ai()
 void AntSim::collisions()
 {
 	VECTOR2 collision;
-	
+
 	for(int i = 0 ; i  < antSimNS::HOR_NUM_COL_RECTS;  i++)
-		for(int j = 0 ; j  < antSimNS::HOR_NUM_COL_RECTS;  j++)
+		for(int j = 0 ; j  < antSimNS::HOR_NUM_COL_RECTS;  j++) {
 			colRects[i][j].checkCollisions();
-
-	//lopp ants
-	for(int j = 0; j < antSimNS::MAX_ANTS; j++)
-	{
-		if(input->getMouseRButton() && mouse.collidesWith(ants[j],collision)) {
-			mouse.getInfo(ants[j]);
 		}
-		if(input->getMouseRButton() && mouse.collidesWith(base,collision)) {
-			mouse.getInfo(base);
-		}
-	}
 
-	
+		//loop ants
+		for(int j = 0; j < antSimNS::MAX_ANTS; j++)
+		{
+			if(input->getMouseRButton() && mouse.collidesWith(ants[j],collision)) {
+				mouse.getInfo(ants[j]);
+			}
+			if(input->getMouseRButton() && mouse.collidesWith(base,collision)) {
+				mouse.getInfo(base);
+			}
+		}
+
+
 
 }
 
@@ -184,12 +184,11 @@ void AntSim::render()
 	}
 
 	for(int i = 0 ; i  < antSimNS::HOR_NUM_COL_RECTS;  i++)
-		for(int j = 0 ; j  < antSimNS::HOR_NUM_COL_RECTS;  j++)
-			debugText.print(std::to_string(i)+","+std::to_string(j) + ":" + std::to_string(colRects[i][j].objects.size()),i*rectWidth,j*rectHeight);
-	
-
-	graphics->spriteEnd();                  // end drawing sprites	
-
+		for(int j = 0 ; j  < antSimNS::HOR_NUM_COL_RECTS;  j++) {
+			debugText.print(std::to_string(i)+","+std::to_string(j) + ":" + std::to_string(colRects[i][j].objects.size()+colRects[i][j].ants.size()),i*rectWidth,j*rectHeight);
+			colRects[i][j].clear();
+		}
+		graphics->spriteEnd();                  // end drawing sprites	
 }
 
 //=============================================================================
@@ -277,7 +276,20 @@ AntSim::collisionRect::collisionRect()
 
 }
 
-void AntSim::collisionRect::addActor(Ant* in)
+void AntSim::collisionRect::clear() {
+	ants.clear();
+	for(list<Actor*>::iterator obj = objects.begin(); obj != objects.end(); obj++){
+		if(!(*obj)->getActive()) {
+			auto old = obj;
+			obj++;
+			objects.erase(old);
+			if(obj == objects.end()) break;
+		}
+		//objects.clear();
+	}
+}
+
+void AntSim::collisionRect::addAnt(Ant* in)
 {
 	ants.push_front(in);
 }
@@ -293,7 +305,7 @@ void AntSim::collisionRect::checkCollisions()
 	VECTOR2 coll;
 	for(Ant* ant : ants){
 		for(list<Actor*>::iterator obj = objects.begin(); obj != objects.end(); obj++){
-			
+
 			if((*obj)->getActive()){
 				if(ant->collidesWith(**obj,coll)){
 					ant->touches(*obj);
@@ -314,42 +326,37 @@ void AntSim::collisionRect::checkCollisions()
 			}
 		}
 	}
-	ants.clear();
 }
 
 void AntSim::placeObjectInProperRect(Actor* in)
 {
 	//bool isAnt = dynamic_cast<Ant*>(in);
 
-	int lx = in->getX()/rectWidth;
-	int ly = in->getY()/rectHeight;
-	int ux = (in->getX()+in->getWidth())/rectWidth;
-	int uy = (in->getY()+in->getHeight())/rectHeight;
+	int lx = (in->getCenterX()- in->getRadius())/rectWidth;
+	int ly = (in->getCenterY()- in->getRadius())/rectHeight;
 
-	for(int i = lx; i <= ux; i++)
-	{
-		for(int j = ly; j <= uy; j++)
-		{
+	int ux = (in->getCenterX()+in->getRadius())/rectWidth;
+	int uy = (in->getCenterY()+in->getRadius())/rectHeight;
 
-				colRects[i][j].addActor(in);	
+	for(int i = lx; i <= ux; i++) {
+		for(int j = ly; j <= uy; j++) {
+			colRects[i][j].addActor(in);	
 		}
 	}
 
 }
 
-void AntSim::placeObjectInProperRect(Ant* in)
+void AntSim::placeAntObjectInProperRect(Ant* in)
 {
 
-	int lx = in->getX()/rectWidth;
-	int ly = in->getY()/rectHeight;
-	int ux = (in->getX()+in->getWidth())/rectWidth;
-	int uy = (in->getY()+in->getHeight())/rectHeight;
+	int lx = in->getCenterX()/rectWidth;
+	int ly = in->getCenterY()/rectHeight;
+	int ux = (in->getCenterX()+in->getWidth())/rectWidth;
+	int uy = (in->getCenterY()+in->getHeight())/rectHeight;
 
-	for(int i = lx; i <= ux; i++)
-	{
-		for(int j = ly; j <= uy; j++)
-		{
-			colRects[i][j].addActor(in);	
+	for(int i = lx; i <= ux; i++) {
+		for(int j = ly; j <= uy; j++) {
+			colRects[i][j].addAnt(in);	
 		}
 	}
 

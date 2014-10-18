@@ -3,7 +3,7 @@
 Colony::Colony():Actor()
 {
 	age = 0;
-	resetRate = .05;
+	resetRate = .5;
 	foodLevel = colonyNS::STOMACH_SIZE;
 	alive = true;
 	spawn = false;

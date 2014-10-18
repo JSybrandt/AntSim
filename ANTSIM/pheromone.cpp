@@ -55,7 +55,6 @@ void Pheromone::update(float frameTime)
 		setScale(radius*2/getWidth());
 		setCenterLocation(trueCenter);
 
-
 	}
 }
 
