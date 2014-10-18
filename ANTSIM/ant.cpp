@@ -137,6 +137,8 @@ void Ant::update(float frameTime)
 			signals[i] = Signal();
 		}
 
+		world->placeObjectInProperRect(this);
+
 		if(health <= 0) die();
 
 	}
@@ -204,6 +206,13 @@ void Ant::touches(Actor* other)
 			foodLevel -= ant->receiveFood(foodLevel-antNS::STOMACH_SIZE/2);
 		}
 	}
+
+	Pheromone * pher =  dynamic_cast<Pheromone*>(other);
+	if(pher!=NULL)
+	{
+		receiveSignal(pher->getSignal());
+	}
+
 }
 
 

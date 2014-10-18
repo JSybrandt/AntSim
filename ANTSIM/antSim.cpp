@@ -7,6 +7,7 @@
 
 #include "antSim.h"
 
+using std::list;
 
 //=============================================================================
 // Constructor
@@ -17,6 +18,8 @@ AntSim::AntSim() {
 	foodIndex = 0;
 	pherIndex = 0;
 	clickedLastFrame = false;
+	rectWidth = float(GAME_WIDTH)/antSimNS::HOR_NUM_COL_RECTS;
+	rectHeight = float(GAME_HEIGHT)/antSimNS::HOR_NUM_COL_RECTS;
 }
 
 //=============================================================================
@@ -130,49 +133,22 @@ void AntSim::collisions()
 {
 	VECTOR2 collision;
 	
+	for(int i = 0 ; i  < antSimNS::HOR_NUM_COL_RECTS;  i++)
+		for(int j = 0 ; j  < antSimNS::HOR_NUM_COL_RECTS;  j++)
+			colRects[i][j].checkCollisions();
+
 	//lopp ants
 	for(int j = 0; j < antSimNS::MAX_ANTS; j++)
 	{
-
-		//check ants with pheromone
-		for(int i = 0 ; i < antSimNS::MAX_PHEROMONE; i++)
-		{
-			//if an ant is in range of the pheromone
-			if(pheromones[i].collidesWith(ants[j],collision))
-			{
-				ants[j].receiveSignal(pheromones[i].getSignal());
-			}
+		if(input->getMouseRButton() && mouse.collidesWith(ants[j],collision)) {
+			mouse.getInfo(ants[j]);
 		}
-
-		//check ant with food
-		for(int i = 0 ; i < antSimNS::MAX_FOOD; i++)
-		{
-			//if an ant is in range of the pheromone
-			if(ants[i].collidesWith(food[j],collision))
-			{
-				ants[i].touches(&food[j]);
-			}
-		}
-
-		for(int i = 0; i < antSimNS::MAX_ANTS; i++)
-		{
-			if(ants[i].collidesWith(ants[j],collision))
-			{
-				ants[i].touches(&ants[j]);
-				ants[j].touches(&ants[i]);
-			}
-		}
-
-
-	}
-	for(int i = 0; i < antSimNS::MAX_ANTS; i++) {
-		if(input->getMouseRButton() && mouse.collidesWith(ants[i],collision)) {
-			mouse.getInfo(ants[i]);
-		}
-	}
-	if(input->getMouseRButton() && mouse.collidesWith(base,collision)) {
+		if(input->getMouseRButton() && mouse.collidesWith(base,collision)) {
 			mouse.getInfo(base);
+		}
 	}
+
+	
 
 }
 
@@ -260,6 +236,7 @@ void AntSim::spawnFood(VECTOR2 loc)
 			food[foodIndex].create(loc);
 			Signal s(SignalType::food,loc);
 			spawnPher(loc,s);
+			placeObjectInProperRect(&food[foodIndex]);
 			break;
 		}
 
@@ -278,6 +255,7 @@ void AntSim::spawnPher(VECTOR2 loc, Signal s)
 		if(!pheromones[pherIndex].getActive())
 		{
 			pheromones[pherIndex].create(loc,s);
+			placeObjectInProperRect(&pheromones[pherIndex]);
 			break;
 		}
 
@@ -285,9 +263,74 @@ void AntSim::spawnPher(VECTOR2 loc, Signal s)
 	}
 }
 
+AntSim::collisionRect::collisionRect()
+{
+	ants.clear();
+	objects.clear();
+
+}
+
+void AntSim::collisionRect::addActor(Ant* in)
+{
+	ants.push_front(in);
+}
+
+void AntSim::collisionRect::addActor(Actor* in)
+{
+	objects.push_front(in);
+}
 
 
+void AntSim::collisionRect::checkCollisions()
+{
+	VECTOR2 coll;
+	for(Ant* ant : ants){
+		for(list<Actor*>::iterator obj = objects.begin(); obj != objects.end(); obj++){
+			
+			if((*obj)->getActive()){
+				if(ant->collidesWith(**obj,coll)){
+					ant->touches(*obj);
+				}
+			}
+			else{
+				auto old = obj;
+				obj++;
+				objects.erase(old);
+				if(obj == objects.end()) break;
+			}
+		}
 
+		for(Ant* ant2 : ants){
+			if(ant != ant2 && ant->collidesWith(*ant2,coll)){
+				ant->touches(ant2);
+				ant2->touches(ant);
+			}
+		}
+	}
+	ants.clear();
+}
+
+void AntSim::placeObjectInProperRect(Actor* in)
+{
+	bool isAnt = dynamic_cast<Ant*>(in);
+
+	int lx = in->getX()/rectWidth;
+	int ly = in->getY()/rectHeight;
+	int ux = (in->getX()+in->getWidth())/rectWidth;
+	int uy = (in->getY()+in->getHeight())/rectHeight;
+
+	for(int i = lx; i <= ux; i++)
+	{
+		for(int j = ly; j < uy; j++)
+		{
+			if(isAnt)
+				colRects[i][j].addActor(static_cast<Ant*>(in));	
+			else 
+				colRects[i][j].addActor(in);	
+		}
+	}
+
+}
 
 
 

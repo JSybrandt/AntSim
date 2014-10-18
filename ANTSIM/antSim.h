@@ -10,6 +10,9 @@
 #include "pheromone.h"
 #include "mouse.h"
 
+//for collision rect
+#include<list>
+
 namespace antSimNS
 {
 	
@@ -17,11 +20,30 @@ namespace antSimNS
 	const int MAX_ANTS = 1000;
 	const int MAX_FOOD = 1000;
 	const int STARTING_ANTS = 10;
+	const int HOR_NUM_COL_RECTS = 10;
 }
 
 class AntSim: public Game
 {
 private:
+
+	struct collisionRect
+	{
+		//to be used for non moving actors
+		std::list<Actor*>objects;
+		std::list<Ant*>ants;
+
+		collisionRect();
+		//~collisionRect(){};
+
+		void addActor(Actor* in);
+		void addActor(Ant* in);
+
+		void checkCollisions();
+
+	};
+
+
 	TextureManager antTex;
 	TextureManager hillTex;
 	TextureManager foodTex;
@@ -36,6 +58,11 @@ private:
 	int pherIndex;
 
 	bool clickedLastFrame; 
+
+	float rectWidth;
+	float rectHeight;
+
+	collisionRect colRects[antSimNS::HOR_NUM_COL_RECTS][antSimNS::HOR_NUM_COL_RECTS];
 
 public:
 	
@@ -54,4 +81,9 @@ public:
 	void spawnAnt(VECTOR2 loc);
 	void spawnFood(VECTOR2 loc);
 	void spawnPher(VECTOR2 loc, Signal s);
+
+
+	//call for static objects once, call for ants every frame
+	void placeObjectInProperRect(Actor* in);
+
 };
