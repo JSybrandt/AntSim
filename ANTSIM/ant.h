@@ -16,7 +16,7 @@ namespace antNS
 	const float ANT_MAX_HEALTH = 100;
 	const int NUM_SIMULTANEOUS_SIGNALS = 10;
 
-	const float COOLDOWN = 0.5;
+	const float COOLDOWN = 10;
 }
 
 enum Behavior{

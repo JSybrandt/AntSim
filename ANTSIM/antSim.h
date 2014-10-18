@@ -19,7 +19,7 @@ namespace antSimNS
 	const int MAX_PHEROMONE = 2000;
 	const int MAX_ANTS = 1000;
 	const int MAX_FOOD = 1000;
-	const int STARTING_ANTS = 10;
+	const int STARTING_ANTS = 1;
 	const int HOR_NUM_COL_RECTS = 10;
 }
 
@@ -43,7 +43,7 @@ private:
 
 	};
 
-
+	TextDX debugText;
 	TextureManager antTex;
 	TextureManager hillTex;
 	TextureManager foodTex;
@@ -85,5 +85,5 @@ public:
 
 	//call for static objects once, call for ants every frame
 	void placeObjectInProperRect(Actor* in);
-
+	void placeObjectInProperRect(Ant* in);
 };

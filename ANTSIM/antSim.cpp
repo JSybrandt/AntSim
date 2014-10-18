@@ -38,6 +38,9 @@ void AntSim::initialize(HWND hwnd)
 {
 	Game::initialize(hwnd); // throws GameError
 
+	if(!debugText.initialize(graphics,10,false,false,"Consolas"))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing debug text"));
+
 	if(!antTex.initialize(graphics,ANT_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ant texture"));
 
@@ -180,6 +183,10 @@ void AntSim::render()
 		mouse.print();
 	}
 
+	for(int i = 0 ; i  < antSimNS::HOR_NUM_COL_RECTS;  i++)
+		for(int j = 0 ; j  < antSimNS::HOR_NUM_COL_RECTS;  j++)
+			debugText.print(std::to_string(i)+","+std::to_string(j) + ":" + std::to_string(colRects[i][j].objects.size()),i*rectWidth,j*rectHeight);
+	
 
 	graphics->spriteEnd();                  // end drawing sprites	
 
@@ -312,7 +319,7 @@ void AntSim::collisionRect::checkCollisions()
 
 void AntSim::placeObjectInProperRect(Actor* in)
 {
-	bool isAnt = dynamic_cast<Ant*>(in);
+	//bool isAnt = dynamic_cast<Ant*>(in);
 
 	int lx = in->getX()/rectWidth;
 	int ly = in->getY()/rectHeight;
@@ -321,17 +328,32 @@ void AntSim::placeObjectInProperRect(Actor* in)
 
 	for(int i = lx; i <= ux; i++)
 	{
-		for(int j = ly; j < uy; j++)
+		for(int j = ly; j <= uy; j++)
 		{
-			if(isAnt)
-				colRects[i][j].addActor(static_cast<Ant*>(in));	
-			else 
+
 				colRects[i][j].addActor(in);	
 		}
 	}
 
 }
 
+void AntSim::placeObjectInProperRect(Ant* in)
+{
+
+	int lx = in->getX()/rectWidth;
+	int ly = in->getY()/rectHeight;
+	int ux = (in->getX()+in->getWidth())/rectWidth;
+	int uy = (in->getY()+in->getHeight())/rectHeight;
+
+	for(int i = lx; i <= ux; i++)
+	{
+		for(int j = ly; j <= uy; j++)
+		{
+			colRects[i][j].addActor(in);	
+		}
+	}
+
+}
 
 
 
