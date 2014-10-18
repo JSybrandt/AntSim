@@ -32,6 +32,10 @@ void Pheromone::create(VECTOR2 loc, Signal s)
 		radius = BEG_RADIUS;
 		lifeSpan = BEG_LIFESPAN;
 		break;
+	case SignalType::queen:
+		color = QUEEN_COLOR;
+		radius = QUEEN_RADIUS;
+		lifeSpan = QUEEN_LIFESPAN;
 	default:
 		color = DEFAULT_COLOR;
 		radius = DEFAULT_RADIUS;

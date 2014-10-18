@@ -13,7 +13,12 @@ namespace pheromoneNS{
 	const COLOR_ARGB BEG_COLOR = graphicsNS::LTGRAY;
 	const float BEG_LIFESPAN = 5;
 
+
+	const float QUEEN_RADIUS = 120;
+	const COLOR_ARGB QUEEN_COLOR = graphicsNS::YELLOW;
+	const float QUEEN_LIFESPAN = 20;
 	
+
 	const float DEFAULT_RADIUS = 80;
 	const COLOR_ARGB DEFAULT_COLOR = graphicsNS::WHITE;
 	const float DEFAULT_LIFESPAN = 5;

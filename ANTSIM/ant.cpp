@@ -214,3 +214,66 @@ float Ant::receiveFood(float avalible)
 		foodLevel += avalible;
 		return avalible;
 }
+
+Queen::Queen():Ant(){
+	age = 0;
+	AntSim* world;
+	isUnderground = true;
+	foodLevel = antNS::QUEEN_STOMACH_SIZE;
+	alive = false;
+	setActive(false);
+	signalIndex = 0;
+	behavior = Behavior::DEFAULT;
+
+	cooldown = 0;
+}
+
+Queen::~Queen(){
+
+}
+
+void Queen::create(VECTOR2 location)
+{
+	setCenterLocation(location);
+	age = 0;
+	isUnderground = true;
+	setActive(true);
+	foodLevel = antNS::QUEEN_STOMACH_SIZE;
+	alive = true;
+	health = antNS::QUEEN_MAX_HEALTH;
+}
+
+void Queen::Reproduce(VECTOR2 location){
+
+	Ant::create(location);
+
+}
+
+float Queen::receiveFood(float avalible)
+{
+		float emptySpace = antNS::QUEEN_STOMACH_SIZE - foodLevel;
+		avalible = min(emptySpace,avalible);
+		foodLevel += avalible;
+		return avalible;
+}
+
+void Queen::die()
+{
+	alive = false;
+	setActive(false);
+}
+
+void Queen::hungryAction(float frameTime)
+{
+
+
+
+}
+
+void Queen::update(float frameTime){
+
+}
+
+void Queen::defaultAction(float frameTime){
+
+}
