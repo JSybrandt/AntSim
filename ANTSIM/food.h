@@ -5,7 +5,6 @@
 namespace foodNS{
 	const float DEFAULT_FOOD_VAL = 10;
 	const float LIFE_SPAN = 10;
-	const float QUEEN_LIFE_SPAN = 100;
 }
 
 //TODO: food should probably give off a chemical signal in order to inform ants that the food is near. 
