@@ -51,7 +51,7 @@ public:
     void releaseAll();
     void resetAll();
 
-	void spawnAnt(VECTOR2 loc);
-	void spawnFood(VECTOR2 loc);
-	void spawnPher(VECTOR2 loc, Signal s);
+	Ant* spawnAnt(VECTOR2 loc);
+	Food* spawnFood(VECTOR2 loc);
+	Pheromone* spawnPher(VECTOR2 loc, Signal s);
 };

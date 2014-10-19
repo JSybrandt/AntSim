@@ -18,8 +18,8 @@ namespace pheromoneNS{
 	const COLOR_ARGB DEFAULT_COLOR = graphicsNS::WHITE;
 	const float DEFAULT_LIFESPAN = 5;
 
-	const float DISSIPATION_RATE = 7;
-	const float MIN_RADIUS = 5;
+	const float DISSIPATION_RATE = 20;
+	const float MIN_RADIUS = 0;
 };
 
 class Pheromone: public Actor
@@ -31,10 +31,13 @@ public:
 	void update(float frameTime);
 	void draw();//draw will include a color based on the type
 	Signal getSignal(){return signal;}
+	void refresh();
 private:
 	Signal signal;
 	float age;
 	float lifeSpan;
 	COLOR_ARGB color;
 	VECTOR2 trueCenter;
+	float startingRadius;
+
 };

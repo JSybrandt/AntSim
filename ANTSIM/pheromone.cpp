@@ -39,6 +39,8 @@ void Pheromone::create(VECTOR2 loc, Signal s)
 		break;
 	}
 
+	startingRadius = radius;
+
 }
 
 void Pheromone::update(float frameTime)
@@ -50,10 +52,14 @@ void Pheromone::update(float frameTime)
 
 		//makes circle shrink
 		radius -= pheromoneNS::DISSIPATION_RATE * frameTime;
-		if(radius <= pheromoneNS::MIN_RADIUS) radius = pheromoneNS::MIN_RADIUS;
-		setScale(1);
-		setScale(radius*2/getWidth());
-		setCenterLocation(trueCenter);
+		if(radius <= pheromoneNS::MIN_RADIUS){
+			setActive(false);
+		}
+		else{
+			setScale(1);
+			setScale(radius*2/getWidth());
+			setCenterLocation(trueCenter);
+		}
 
 
 	}
@@ -65,4 +71,10 @@ void Pheromone::draw()
 	{
 		Actor::draw(color);
 	}
+}
+
+void Pheromone::refresh()
+{
+	age = 0;
+	radius = startingRadius;
 }

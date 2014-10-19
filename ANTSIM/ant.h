@@ -2,6 +2,7 @@
 #include "Actor.h"
 #include "signal.h"
 #include "food.h"
+#include "pheromone.h"
 
 class AntSim;
 
@@ -44,6 +45,8 @@ private:
 	//different versions of update based on behavior
 	void defaultAction(float frameTime);
 	void hungryAction(float frameTime);
+
+	Pheromone* pher;
 
 
 public:

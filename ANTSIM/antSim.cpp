@@ -229,8 +229,9 @@ void AntSim::resetAll()
 	return;
 }
 
-void AntSim::spawnAnt(VECTOR2 loc)
+Ant* AntSim::spawnAnt(VECTOR2 loc)
 {
+	Ant* result = nullptr;
 	for(int i = 0 ; i < antSimNS::MAX_ANTS; i++)
 	{
 		//loop index if end is reached
@@ -240,15 +241,17 @@ void AntSim::spawnAnt(VECTOR2 loc)
 		if(!ants[antIndex].getActive())
 		{
 			ants[antIndex].create(loc);
+			result = &ants[antIndex];
 			break;
 		}
-
 		antIndex++;
 	}
+	return result;
 }
 
-void AntSim::spawnFood(VECTOR2 loc)
+Food* AntSim::spawnFood(VECTOR2 loc)
 {
+	Food* result = nullptr;
 	for(int i = 0 ; i < antSimNS::MAX_FOOD; i++)
 	{
 		//loop index if end is reached
@@ -257,18 +260,19 @@ void AntSim::spawnFood(VECTOR2 loc)
 		//if selected ant is unused
 		if(!food[foodIndex].getActive())
 		{
-			food[foodIndex].create(loc);
-			Signal s(SignalType::food,loc);
-			spawnPher(loc,s);
+			food[foodIndex].create(this,loc);
+			result = &food[foodIndex];
 			break;
 		}
 
 		foodIndex++;
 	}
+	return result;
 }
 
-void AntSim::spawnPher(VECTOR2 loc, Signal s)
+Pheromone* AntSim::spawnPher(VECTOR2 loc, Signal s)
 {
+	Pheromone * result = nullptr;
 	for(int i = 0 ; i < antSimNS::MAX_PHEROMONE; i++)
 	{
 		//loop index if end is reached
@@ -278,11 +282,13 @@ void AntSim::spawnPher(VECTOR2 loc, Signal s)
 		if(!pheromones[pherIndex].getActive())
 		{
 			pheromones[pherIndex].create(loc,s);
+			result = &pheromones[pherIndex];
 			break;
 		}
 
 		pherIndex++;
 	}
+	return result;
 }
 
 

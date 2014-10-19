@@ -2,6 +2,12 @@
 
 #include"Actor.h"
 
+#include"Pheromone.h"
+
+#include"signal.h"
+
+class AntSim;
+
 namespace foodNS{
 	const float DEFAULT_FOOD_VAL = 10;
 	const float LIFE_SPAN = 10;
@@ -14,11 +20,12 @@ class Food : public Actor
 private:
 	float value;
 	float age;
+	Pheromone * pher;
 public:
 	Food();
 	~Food();
 
-	void create(VECTOR2 loc);
+	void create(AntSim * w, VECTOR2 loc);
 
 	void update(float frameTime);
 

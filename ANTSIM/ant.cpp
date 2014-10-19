@@ -14,6 +14,7 @@ Ant::Ant():Actor()
 	behavior = Behavior::DEFAULT;
 	cooldown = 0;
 	name = "Ant";
+	pher = nullptr;
 }
 
 Ant::~Ant()
@@ -22,11 +23,7 @@ Ant::~Ant()
 
 void Ant::hungryAction(float frameTime)
 {
-	//beg
-	if(cooldown == 0){
-		world->spawnPher(*getCenter(),Signal(SignalType::beg,*getCenter()));
-		cooldown += antNS::COOLDOWN;
-	}
+	
 
 	VECTOR2 closestFood = *getCenter();
 	float distanceToClosestFoodSqrd = 999999999999999;
@@ -51,8 +48,20 @@ void Ant::hungryAction(float frameTime)
 		closestFood *= antNS::ANT_SPEED*frameTime;
 		setCenterLocation(*getCenter()+closestFood);
 		setRadians(atan2(closestFood.y,closestFood.x));
+		pher = nullptr;
 	}
-
+	else
+	{
+			//beg
+		if(pher==nullptr){
+			pher=world->spawnPher(*getCenter(),Signal(SignalType::beg,*getCenter()));
+			cooldown += antNS::COOLDOWN;
+		}
+		else
+		{
+			pher->refresh();
+		}
+	}
 
 }
 
@@ -113,8 +122,10 @@ void Ant::update(float frameTime)
 
 		//eat food
 		foodLevel -= antNS::METABOLISM*frameTime;
-		if(foodLevel < 0) health -= antNS::STARVATION_DAMAGE * frameTime;
-
+		if(foodLevel < 0){
+			health -= antNS::STARVATION_DAMAGE * frameTime;
+			foodLevel = 0;
+		}
 
 		//determine behavior
 		if(foodLevel < antNS::STOMACH_SIZE *0.25) behavior = Behavior::BEGGING;
@@ -158,6 +169,7 @@ void Ant::create(VECTOR2 location)
 	foodLevel = antNS::STOMACH_SIZE;
 	alive = true;
 	health = antNS::ANT_MAX_HEALTH * (rand()%100/100)*25+75;
+	pher = nullptr;
 }
 
 bool Ant::initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM)
