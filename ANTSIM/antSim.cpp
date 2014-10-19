@@ -71,6 +71,8 @@ void AntSim::initialize(HWND hwnd)
 	base.setCenterLocation(VECTOR2(GAME_WIDTH/2,GAME_HEIGHT/2));
 	mouse.initialize(this,input,graphics, 0,0,0);
 
+
+
 	return;
 }
 
@@ -108,11 +110,6 @@ void AntSim::update()
 
 
 	base.update(frameTime);
-
-	if(base.getSpawn()) {
-		VECTOR2 test(base.getCenterX(),base.getCenterY());
-		spawnAnt(test);
-	}
 	mouse.update(frameTime);
 }
 
@@ -140,6 +137,7 @@ void AntSim::collisions()
 			//if an ant is in range of the pheromone
 			if(pheromones[i].collidesWith(ants[j],collision))
 			{
+
 				ants[j].receiveSignal(pheromones[i].getSignal());
 			}
 		}

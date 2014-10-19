@@ -9,7 +9,7 @@
 class AntSim;
 
 namespace foodNS{
-	const float DEFAULT_FOOD_VAL = 10;
+	const float DEFAULT_FOOD_VAL = 1000;
 	const float LIFE_SPAN = 10;
 }
 

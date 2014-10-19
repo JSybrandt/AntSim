@@ -8,8 +8,8 @@ class AntSim;
 
 namespace antNS
 {
-	const float LIFE_EXPECTANCY = 10;
-	const float METABOLISM = 20;
+	const float LIFE_EXPECTANCY = 1000;
+	const float METABOLISM = 10;
 	const float STOMACH_SIZE = 100;
 	const float STARVATION_DAMAGE = 10;
 	const float OLD_AGE_DAMAGE = 10;
@@ -39,6 +39,7 @@ private:
 	Signal signals[antNS::NUM_SIMULTANEOUS_SIGNALS];
 	int signalIndex;
 	Behavior behavior;
+	Behavior lastFrame;
 
 	float cooldown;
 
@@ -48,6 +49,8 @@ private:
 
 	Pheromone* pher;
 
+	//moves ant toward given location
+	void moveInDirection(VECTOR2 dir, float frameTime);
 
 public:
 	Ant();
