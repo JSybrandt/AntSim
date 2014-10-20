@@ -29,6 +29,8 @@ enum Behavior{
 	BEGGING
 };
 
+
+
 class Ant: public Actor
 {
 private:
@@ -43,6 +45,7 @@ private:
 	int signalIndex;
 	Behavior behavior;
 	Behavior lastFrame;
+	Species species;
 
 	float cooldown;
 
@@ -60,7 +63,7 @@ public:
 	~Ant();
 	void update(float frameTime);
 	void draw();
-	void create(VECTOR2 location);
+	void create(VECTOR2 location, Species s = BLACK);
 	bool initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM);
 	void die();
 	void receiveSignal(Signal s);

@@ -10,13 +10,14 @@ enum SignalType
 	queen, //the queen is alive
 	colony_food, //faint food signal from colony
 	food, //foods give off a scent
+	ant_nearby,
 };
 
 class Signal
 {
 public:
 	Signal(){type=SignalType::null;data=VECTOR2(-1,-1);}
-	Signal(SignalType t,VECTOR2 l, float p=1){data=l;type=t;};
+	Signal(SignalType t,VECTOR2 l,Species s = BLACK){data=l;type=t;species=s;};
 	SignalType getType(){return type;}
 	VECTOR2 getData(){return data;}
 	int getPriority(){return (int)type;}
@@ -25,4 +26,5 @@ private:
 	//signals tell ants about a location
 	VECTOR2 data;
 	SignalType type;
+	Species species;
 };
