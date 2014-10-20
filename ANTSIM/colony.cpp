@@ -30,7 +30,7 @@ void Colony::update(float frameTime)
 		if(pher == nullptr)
 		{
 			//the base has a low priority food signal
-			pher = world->spawnPher(*getCenter(),Signal(SignalType::colony_food,*getCenter(),0));
+			pher = world->spawnPher(*getCenter(),Signal(SignalType::colony_food,*getCenter()));
 		}
 		else
 		{

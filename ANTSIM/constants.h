@@ -78,4 +78,9 @@ const UCHAR ESC_KEY      = VK_ESCAPE;   // escape key
 const UCHAR ALT_KEY      = VK_MENU;     // Alt key
 const UCHAR ENTER_KEY    = VK_RETURN;   // Enter key
 
+enum Species{
+	BLACK,
+	RED
+};
+
 #endif

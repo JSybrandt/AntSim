@@ -57,7 +57,7 @@ void Ant::hungryAction(float frameTime)
 	{
 		//beg
 		if(pher==nullptr){
-			pher=world->spawnPher(*getCenter(),Signal(SignalType::beg,*getCenter()));
+			pher=world->spawnPher(*getCenter(),Signal(SignalType::beg,*getCenter(),species));
 			cooldown += antNS::COOLDOWN;
 		}
 		else
@@ -72,6 +72,16 @@ void Ant::hungryAction(float frameTime)
 
 void Ant::defaultAction(float frameTime)
 {
+	if(pher == nullptr)
+	{
+		pher = world->spawnPher(*getCenter(),Signal(SignalType::ant_nearby,*getCenter(),species));
+	}
+	else
+	{
+		pher->refresh();
+		pher->setSignal(Signal(SignalType::beg,*getCenter(),species));
+	}
+
 	VECTOR2 currentDestination(-1,-1);
 	float strongestSignal = -1;
 	float distanceToClosest = 999999999999999;
@@ -173,7 +183,7 @@ void Ant::draw()
 	if(!isUnderground && getActive()) Actor::draw();
 }
 
-void Ant::create(VECTOR2 location)
+void Ant::create(VECTOR2 location,Species s)
 {
 	setCenterLocation(location);
 	age = 0;
@@ -183,8 +193,9 @@ void Ant::create(VECTOR2 location)
 	direction = ((rand()%1000)/1000.0)*2*PI;
 	foodLevel = antNS::STOMACH_SIZE;
 	alive = true;
-	health = antNS::ANT_MAX_HEALTH * (rand()%100/100)*25+75;
+	health = antNS::ANT_MAX_HEALTH * (rand()%100/100.0)*25+75;
 	pher = nullptr;
+	species = s;
 }
 
 bool Ant::initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM)

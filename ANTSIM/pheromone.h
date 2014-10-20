@@ -17,6 +17,9 @@ namespace pheromoneNS{
 	const COLOR_ARGB BEG_COLOR = graphicsNS::LTGRAY;
 	const float BEG_LIFESPAN = 5;
 
+	const float ANT_NEARBY_RADIUS = 50;
+	const COLOR_ARGB ANT_NEARBY_COLOR = graphicsNS::BLUE;
+	const float ANT_NEARBY_LIFESPAN = 10;
 	
 	const float DEFAULT_RADIUS = 80;
 	const COLOR_ARGB DEFAULT_COLOR = graphicsNS::WHITE;
