@@ -1,5 +1,6 @@
 #pragma once
 #include "Actor.h"
+#include "pheromone.h"
 
 class AntSim;
 
@@ -12,6 +13,7 @@ namespace colonyNS
 	const float OLD_AGE_DAMAGE = 10;
 	const float COLONY_SPEED = 0;
 	const float COLONY_MAX_HEALTH = 10000;
+	const float BIRTHRATE = 100;
 }
 
 class Colony: public Actor
@@ -20,18 +22,18 @@ private:
 	std::string name;
 	float age;
 	AntSim* world;
-	float birthRate;
 	float resetRate;
 	float foodLevel;		//amount of food in the colony
 	bool alive;
-	bool spawn;
+	Pheromone * pher;
+	float spawnCooldown;
+
 public:
 	Colony();
 	~Colony();
 	void update(float frameTime);
 	void draw();
 	void create(VECTOR2 location);
-	bool getSpawn() { return spawn;}
 	bool initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM);
 	void die();
 

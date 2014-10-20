@@ -4,27 +4,26 @@
 #include "graphics.h"
 
 namespace pheromoneNS{
+	
 	const float FOOD_RADIUS = 100;
 	const COLOR_ARGB FOOD_COLOR = graphicsNS::GREEN;
 	const float FOOD_LIFESPAN = 10;
 
+	const float COLONY_FOOD_RADIUS = 300;
+	const COLOR_ARGB COLONY_FOOD_COLOR = graphicsNS::YELLOW;
+	const float COLONY_FOOD_LIFESPAN = 10;
 
 	const float BEG_RADIUS = 30;
 	const COLOR_ARGB BEG_COLOR = graphicsNS::LTGRAY;
 	const float BEG_LIFESPAN = 5;
 
-
-	const float QUEEN_RADIUS = 120;
-	const COLOR_ARGB QUEEN_COLOR = graphicsNS::YELLOW;
-	const float QUEEN_LIFESPAN = 20;
 	
-
 	const float DEFAULT_RADIUS = 80;
 	const COLOR_ARGB DEFAULT_COLOR = graphicsNS::WHITE;
 	const float DEFAULT_LIFESPAN = 5;
 
-	const float DISSIPATION_RATE = 7;
-	const float MIN_RADIUS = 5;
+	const float DISSIPATION_RATE = 50;
+	const float MIN_RADIUS = 0;
 };
 
 class Pheromone: public Actor
@@ -36,10 +35,22 @@ public:
 	void update(float frameTime);
 	void draw();//draw will include a color based on the type
 	Signal getSignal(){return signal;}
+	void setSignal(Signal s){signal =s;}
+	void refresh();
+
+	//does not update data
+	void setCenterLocation(VECTOR2 newPos);
+
 private:
+	void setSize(float desiredRad);
+
 	Signal signal;
 	float age;
 	float lifeSpan;
 	COLOR_ARGB color;
 	VECTOR2 trueCenter;
+	float startingRadius;
+	float drawnRadius;
+	float rawRadius;
+
 };

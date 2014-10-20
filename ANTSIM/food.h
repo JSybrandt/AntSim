@@ -2,10 +2,15 @@
 
 #include"Actor.h"
 
+#include"Pheromone.h"
+
+#include"signal.h"
+
+class AntSim;
+
 namespace foodNS{
-	const float DEFAULT_FOOD_VAL = 10;
+	const float DEFAULT_FOOD_VAL = 1000;
 	const float LIFE_SPAN = 10;
-	const float QUEEN_LIFE_SPAN = 100;
 }
 
 //TODO: food should probably give off a chemical signal in order to inform ants that the food is near. 
@@ -15,11 +20,12 @@ class Food : public Actor
 private:
 	float value;
 	float age;
+	Pheromone * pher;
 public:
 	Food();
 	~Food();
 
-	void create(VECTOR2 loc);
+	void create(AntSim * w, VECTOR2 loc);
 
 	void update(float frameTime);
 

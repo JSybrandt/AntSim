@@ -1,4 +1,5 @@
 #include "food.h"
+#include "antSim.h"
 
 Food::Food()
 {
@@ -9,11 +10,14 @@ Food::Food()
 
 Food::~Food(){};
 
-void Food::create( VECTOR2 loc)
+void Food::create(AntSim * w, VECTOR2 loc)
 {
 	setActive(true);
 	setCenterLocation(loc);
 	age = 0;
+	//spawn a pher to point to the current food
+	pher = w->spawnPher(loc,Signal(SignalType::food,loc));
+	value = foodNS::DEFAULT_FOOD_VAL;
 }
 
 float Food::eat(float req)
@@ -28,7 +32,9 @@ void Food::update(float frameTime)
 {
 	if(getActive())
 	{
+		pher->refresh();
 		age += frameTime;
-		if(age >= foodNS::LIFE_SPAN) setActive(false);
+		if(age >= foodNS::LIFE_SPAN || value <= 0) setActive(false);
+		
 	}
 }

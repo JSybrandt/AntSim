@@ -10,38 +10,45 @@ Pheromone::~Pheromone(){}
 
 void Pheromone::create(VECTOR2 loc, Signal s)
 {
-	setScale(radius*2/getWidth());
-	this->radius = radius;
+	
+	//setting radius is a bad idea, set scale instead
+	switch (s.getType())
+	{
+	case SignalType::food:
+		color = FOOD_COLOR;
+		startingRadius = FOOD_RADIUS;
+		lifeSpan = FOOD_LIFESPAN;
+		break;
+	case SignalType::beg:
+		color = BEG_COLOR;
+		startingRadius = BEG_RADIUS;
+		lifeSpan = BEG_LIFESPAN;
+		break;
+	case SignalType::colony_food:
+		color = COLONY_FOOD_COLOR;
+		startingRadius = COLONY_FOOD_RADIUS;
+		lifeSpan = COLONY_FOOD_LIFESPAN;
+		break;
+	default:
+		color = DEFAULT_COLOR;
+		startingRadius = DEFAULT_RADIUS;
+		lifeSpan = DEFAULT_LIFESPAN;
+		break;
+	}
+
+	drawnRadius = startingRadius;
+
+	setScale(1);
+	rawRadius = getWidth()/2;
+
+	setSize(drawnRadius);
+
 	setCenterLocation(loc);
 	trueCenter = loc;
 	signal=s;
 	setActive(true);
 	age = 0;
-
-
-
-	switch (s.getType())
-	{
-	case SignalType::food:
-		color = FOOD_COLOR;
-		radius = FOOD_RADIUS;
-		lifeSpan = FOOD_LIFESPAN;
-		break;
-	case SignalType::beg:
-		color = BEG_COLOR;
-		radius = BEG_RADIUS;
-		lifeSpan = BEG_LIFESPAN;
-		break;
-	case SignalType::queen:
-		color = QUEEN_COLOR;
-		radius = QUEEN_RADIUS;
-		lifeSpan = QUEEN_LIFESPAN;
-	default:
-		color = DEFAULT_COLOR;
-		radius = DEFAULT_RADIUS;
-		lifeSpan = DEFAULT_LIFESPAN;
-		break;
-	}
+	
 
 }
 
@@ -52,12 +59,15 @@ void Pheromone::update(float frameTime)
 		age += frameTime;
 		if(age > lifeSpan) setActive(false);
 
-		//makes circle shrink
-		radius -= pheromoneNS::DISSIPATION_RATE * frameTime;
-		if(radius <= pheromoneNS::MIN_RADIUS) radius = pheromoneNS::MIN_RADIUS;
-		setScale(1);
-		setScale(radius*2/getWidth());
-		setCenterLocation(trueCenter);
+		drawnRadius-=pheromoneNS::DISSIPATION_RATE*frameTime;
+
+		if(drawnRadius <= pheromoneNS::MIN_RADIUS){
+			setActive(false);
+		}
+		else{
+			setSize(drawnRadius);
+			setCenterLocation(trueCenter);
+		}
 
 
 	}
@@ -69,4 +79,22 @@ void Pheromone::draw()
 	{
 		Actor::draw(color);
 	}
+}
+
+void Pheromone::refresh()
+{
+	age = 0;
+	drawnRadius = startingRadius;
+}
+
+void Pheromone::setSize(float delR)
+{
+	//its better if no one touches this, it works because collision radius is dependent of scale
+	setScale(delR/rawRadius);
+}
+
+void Pheromone::setCenterLocation(VECTOR2 newLoc)
+{
+	Actor::setCenterLocation(newLoc);
+	trueCenter = newLoc;
 }

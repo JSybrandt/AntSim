@@ -12,8 +12,10 @@ Ant::Ant():Actor()
 	setActive(false);
 	signalIndex = 0;
 	behavior = Behavior::DEFAULT;
+	lastFrame = Behavior::DEFAULT;
 	cooldown = 0;
 	name = "Ant";
+	pher = nullptr;
 }
 
 Ant::~Ant()
@@ -22,35 +24,47 @@ Ant::~Ant()
 
 void Ant::hungryAction(float frameTime)
 {
-	//beg
-	if(cooldown == 0){
-		world->spawnPher(*getCenter(),Signal(SignalType::beg,*getCenter()));
-		cooldown += antNS::COOLDOWN;
-	}
+	
 
-	VECTOR2 closestFood = *getCenter();
-	float distanceToClosestFoodSqrd = 999999999999999;
-
+	VECTOR2 currentDestination(-1,-1);
+	float strongestSignal = -1;
+	float distanceToClosest = 999999999999999;
 	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
 	{
-		if(signals[i].getType()==SignalType::food)
+		//types of signals to consider
+		if(signals[i].getType()==SignalType::food || signals[i].getType()==SignalType::colony_food)
 		{
-			VECTOR2 distToFood = signals[i].getData()-*getCenter();
-			float currentDistanceSqrd = distToFood.x*distToFood.x + distToFood.y*distToFood.y;
-			if(currentDistanceSqrd < distanceToClosestFoodSqrd)
-			{
-				closestFood = distToFood;
-			}
-		}
-	}
+			//if the new signal is closer, use that
+			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
+			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
 
-	//if we have a valid destination
-	if(closestFood != *getCenter())
+			//go to the larger priority, or go to the closest
+			if(signals[i].getPriority() > strongestSignal || (signals[i].getPriority() == strongestSignal && currentDistanceSqrd<distanceToClosest))
+			{
+				//set destination, reset distance
+				currentDestination = signals[i].getData();
+				strongestSignal=signals[i].getPriority();
+				distanceToClosest = currentDistanceSqrd;
+			}
+			
+		}//get largest priority
+	}//for
+
+
+	moveInDirection(currentDestination,frameTime);
+
+	if(currentDestination == VECTOR2(-1,-1))
 	{
-		D3DXVec2Normalize(&closestFood,&closestFood);
-		closestFood *= antNS::ANT_SPEED*frameTime;
-		setCenterLocation(*getCenter()+closestFood);
-		setRadians(atan2(closestFood.y,closestFood.x));
+		//beg
+		if(pher==nullptr){
+			pher=world->spawnPher(*getCenter(),Signal(SignalType::beg,*getCenter()));
+			cooldown += antNS::COOLDOWN;
+		}
+		else
+		{
+			pher->refresh();
+			pher->setSignal(Signal(SignalType::beg,*getCenter()));
+		}
 	}
 
 
@@ -59,25 +73,33 @@ void Ant::hungryAction(float frameTime)
 void Ant::defaultAction(float frameTime)
 {
 	VECTOR2 currentDestination(-1,-1);
-	float strongestSignal = 0;
+	float strongestSignal = -1;
+	float distanceToClosest = 999999999999999;
 	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
 	{
-		if(signals[i].getPriority() > strongestSignal)
+		//types of signals to consider
+		if(signals[i].getType()!=SignalType::null)
 		{
-			currentDestination = signals[i].getData();
-			strongestSignal=signals[i].getPriority();
-		}
-	}
-	//if we have a valid destination
-	if(currentDestination.x>0&&currentDestination.y>0)
-	{
-		//get vector from this to dest
-		currentDestination -= *getCenter();
-		D3DXVec2Normalize(&currentDestination,&currentDestination);
-		currentDestination *= antNS::ANT_SPEED*frameTime;
-		setCenterLocation(*getCenter()+currentDestination);
-		setRadians(atan2(currentDestination.y,currentDestination.x));
-	}
+			//if the new signal is closer, use that
+			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
+			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
+
+			//go to the larger priority, or go to the closest
+			if(signals[i].getPriority() > strongestSignal || (signals[i].getPriority() == strongestSignal && currentDistanceSqrd<distanceToClosest))
+			{
+				//set destination, reset distance
+				currentDestination = signals[i].getData();
+				strongestSignal=signals[i].getPriority();
+				distanceToClosest = currentDistanceSqrd;
+			}
+			
+		}//get largest priority
+	}//for
+
+	//if a valid destination was found
+	if(strongestSignal > -1)
+		moveInDirection(currentDestination,frameTime);
+
 	//wander aimlessly
 	else
 	{
@@ -87,16 +109,12 @@ void Ant::defaultAction(float frameTime)
 			direction += ((rand()%1000)/1000.0)*PI/4 - PI/8;
 		}
 
-		D3DXVECTOR2 aim(1,0);
+		D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
 		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
 		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
 		aim.x = nx; aim.y=ny;
-		aim *= antNS::ANT_SPEED*frameTime;
 
-		setCenterLocation(*getCenter() + aim);
-
-		//move
-		setRadians(direction);
+		moveInDirection(aim,frameTime);
 	}
 }
 
@@ -113,13 +131,21 @@ void Ant::update(float frameTime)
 
 		//eat food
 		foodLevel -= antNS::METABOLISM*frameTime;
-		if(foodLevel < 0) health -= antNS::STARVATION_DAMAGE * frameTime;
-
+		if(foodLevel < 0){
+			health -= antNS::STARVATION_DAMAGE * frameTime;
+			foodLevel = 0;
+		}
 
 		//determine behavior
 		if(foodLevel < antNS::STOMACH_SIZE *0.25) behavior = Behavior::BEGGING;
 		else behavior = Behavior::DEFAULT;
 
+
+		if(lastFrame != behavior)
+		{
+			pher = nullptr;
+			lastFrame = behavior;
+		}
 
 		if(behavior == Behavior::DEFAULT)
 		{
@@ -158,6 +184,7 @@ void Ant::create(VECTOR2 location)
 	foodLevel = antNS::STOMACH_SIZE;
 	alive = true;
 	health = antNS::ANT_MAX_HEALTH * (rand()%100/100)*25+75;
+	pher = nullptr;
 }
 
 bool Ant::initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM)
@@ -213,4 +240,24 @@ float Ant::receiveFood(float avalible)
 		avalible = min(emptySpace,avalible);
 		foodLevel += avalible;
 		return avalible;
+		//
+}
+
+void Ant::moveInDirection(VECTOR2 dir,float frameTime)
+{
+	//if we have a valid destination
+	if(dir != *getCenter())
+	{
+		//get vector from this to dest
+		dir -= *getCenter();
+		D3DXVec2Normalize(&dir,&dir);
+		dir *= antNS::ANT_SPEED*frameTime;
+		setCenterLocation(*getCenter()+dir);
+		//point ant in direction
+		setRadians(atan2(dir.y,dir.x));
+		
+		//moving means an ant loses control of its pheromone
+		if(pher!=nullptr)
+			pher->setCenterLocation(*getCenter());
+	}
 }

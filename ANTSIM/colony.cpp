@@ -1,15 +1,18 @@
 #include "Colony.h"
 
+#include "antSim.h"
+
 Colony::Colony():Actor()
 {
 	age = 0;
 	resetRate = .05;
 	foodLevel = colonyNS::STOMACH_SIZE;
 	alive = true;
-	spawn = false;
+	spawnCooldown = 0;
 	setActive(true);
 	setScale(5);
 	name = "Colony";
+	pher = nullptr;
 }
 
 Colony::~Colony()
@@ -24,23 +27,27 @@ void Colony::update(float frameTime)
 		age += frameTime;
 		//if(age > colonyNS::LIFE_EXPECTANCY) health -= colonyNS::OLD_AGE_DAMAGE * frameTime;
 
-
-		//consume food
-		foodLevel -= colonyNS::METABOLISM*frameTime;
-		if(foodLevel < 0) health -= colonyNS::STARVATION_DAMAGE * frameTime;
+		if(pher == nullptr)
+		{
+			//the base has a low priority food signal
+			pher = world->spawnPher(*getCenter(),Signal(SignalType::colony_food,*getCenter(),0));
+		}
+		else
+		{
+			pher->refresh();
+		}
 
 		//Health, die.
 		if(health <= 0) die();
 
-		if(birthRate > 0)
+		spawnCooldown -= frameTime;
+
+		if(spawnCooldown <= 0)
 		{
-			spawn = false;
-			birthRate -= frameTime;
+			world->spawnAnt(*getCenter());
+			spawnCooldown += colonyNS::BIRTHRATE;
 		}
-		if(birthRate < 0) { 
-			birthRate = resetRate;
-			spawn = true;
-		}
+		
 
 	}
 
@@ -69,7 +76,6 @@ bool Colony::initialize(AntSim *gamePtr, int width, int height, int ncols,Textur
 
 void Colony::die()
 {
-	//TODO:leave dead bodies, use animation
 	alive = false;
 	setActive(false);
 }
