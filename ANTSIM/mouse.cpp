@@ -6,8 +6,17 @@ Mouse::Mouse()
 {
 	target = new Actor;
 	collisionType = CIRCLE;
-	radius = 2;
-	selectedItem = -1;	//nothing return
+	radius = 1;
+	menuAnchor = VECTOR2(0,0);
+	verticalOffset = 10;
+	linePtr = 1;
+	selectedItem = -1;
+	menuItemFont = new TextDX();
+	menuHeadingFont = new TextDX();
+	menuItemFontHighlight = new TextDX();
+	data.clear();
+	setScale(.25);
+
 }
 
 Mouse::~Mouse()
@@ -30,6 +39,10 @@ void Mouse::update(float frameTime) {
 		convert = "Species: Red";
 		data.push_back(convert);
 	}
+	else { // if(target->getSpecies() == UNKNOWN)
+		convert = "Species: Unknown";
+		data.push_back(convert);
+	}
 	convert = "Health: ";
 	convert += std::to_string(target->getHealth());
 	data.push_back(convert);
@@ -44,24 +57,16 @@ void Mouse::update(float frameTime) {
 
 void Mouse::draw()
 {
-	Actor::draw();
+
+	Actor::draw(graphicsNS::BLUE);
 }
 
 
-bool Mouse::initialize(AntSim *gamePtr, Input *in, Graphics *g, int width, int height, int ncols)
+bool Mouse::initialize(AntSim *gamePtr, Graphics* graphics, int width, int height, int ncols, TextureManager* textureM) //Input *in, Graphics *g,
 {
 	//target = gamePtr.ants[0];
 	world = gamePtr;
-	input = in;
-	graphics = g;
-	menuAnchor = VECTOR2(0,0);
-	verticalOffset = 10;
-	linePtr = 1;
-	selectedItem = -1;
-	menuItemFont = new TextDX();
-	menuHeadingFont = new TextDX();
-	menuItemFontHighlight = new TextDX();
-	data.clear();
+
 	//data.push_back("Ant");
 	//data.push_back("Health: 100");
 	//data.push_back("Food: 37");
@@ -75,8 +80,8 @@ bool Mouse::initialize(AntSim *gamePtr, Input *in, Graphics *g, int width, int h
 
 
 
-	//return Actor::initialize((Game*)gamePtr,width,height,ncols,textureM);
-	return true;
+	return Actor::initialize((Game*)gamePtr,width,height,ncols,textureM);
+	//return true;
 }
 //void Mouse::getInfo(Actor &ent) {
 //	target = &ent;

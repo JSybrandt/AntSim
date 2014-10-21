@@ -13,7 +13,7 @@ namespace colonyNS
 	const float OLD_AGE_DAMAGE = 10;
 	const float COLONY_SPEED = 0;
 	const float COLONY_MAX_HEALTH = 10000;
-	const float BIRTHRATE = 1;
+	const float BIRTHRATE = 5;
 }
 
 class Colony: public Actor

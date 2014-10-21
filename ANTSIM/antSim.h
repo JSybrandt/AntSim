@@ -52,7 +52,7 @@ public:
     void releaseAll();
     void resetAll();
 
-	Ant* spawnAnt(VECTOR2 loc);
+	Ant* spawnAnt(VECTOR2 loc, Species spc);
 	Food* spawnFood(VECTOR2 loc);
 	Pheromone* spawnPher(VECTOR2 loc, Signal s);
 };

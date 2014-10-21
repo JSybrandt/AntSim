@@ -20,10 +20,11 @@ Queen::~Queen(){
 
 }
 
-void Queen::create(VECTOR2 location)
+void Queen::create(VECTOR2 location,Species spc)
 {
 	setCenterLocation(location);
 	age = 0;
+	species = spc;
 	isUnderground = true;
 	setActive(true);
 	foodLevel = antNS::QUEEN_STOMACH_SIZE;
@@ -58,7 +59,7 @@ void Queen::hungryAction(float frameTime)
 void Queen::defaultAction(float frameTime){
 
 	VECTOR2 location;
-	Reproduce(location);
+	Reproduce(location, species);
 
 }
 
@@ -148,6 +149,6 @@ void Queen::touches(Actor* other)
 }
 
 
-void Queen::Reproduce(VECTOR2 location){
-	 Ant::create(location);
+void Queen::Reproduce(VECTOR2 location,Species spc){
+	 Ant::create(location, spc);
 }

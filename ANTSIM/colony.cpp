@@ -5,13 +5,13 @@
 Colony::Colony():Actor()
 {
 	age = 0;
-	resetRate = 5;
+	resetRate = colonyNS::BIRTHRATE;
 	foodLevel = colonyNS::STOMACH_SIZE;
 	alive = false;
 	spawnCooldown = 0;
 	setActive(false);
 	//radius = .01;
-	setScale(1);
+	setScale(2);
 	name = "Colony";
 	pher = nullptr;
 }
@@ -45,8 +45,8 @@ void Colony::update(float frameTime)
 
 		if(spawnCooldown <= 0)
 		{
-			world->spawnAnt(*getCenter());
-			spawnCooldown += colonyNS::BIRTHRATE;
+			world->spawnAnt(*getCenter(), getSpecies());
+			spawnCooldown += resetRate;
 		}
 		
 

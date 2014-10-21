@@ -31,5 +31,5 @@ public:
 	void getInfo(Ant &ent);
 	void getInfo(Colony &ent);
 	void print();
-	bool initialize(AntSim *gamePtr, Input *in, Graphics *g, int width, int height, int ncols);
+	bool initialize(AntSim *gamePtr, Graphics* graphics, int width, int height, int ncols, TextureManager* textureM);
 };

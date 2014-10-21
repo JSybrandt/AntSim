@@ -291,11 +291,12 @@ void Ant::draw()
 	if(!isUnderground && getActive()) Actor::draw();
 }
 
-void Ant::create(VECTOR2 location,Species s)
+void Ant::create(VECTOR2 location,Species spc)
 {
 	setCenterLocation(location);
 	age = 0;
 	isUnderground = false;
+	species = spc;
 	setActive(true);
 	isMale = (rand()%2);
 	direction = ((rand()%1000)/1000.0)*2*PI;
@@ -303,7 +304,6 @@ void Ant::create(VECTOR2 location,Species s)
 	alive = true;
 	health = antNS::ANT_MAX_HEALTH * (rand()%100/100.0)*25+75;
 	pher = nullptr;
-	species = s;
 }
 
 bool Ant::initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM)

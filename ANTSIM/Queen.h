@@ -15,6 +15,7 @@ private:
 	Signal signals[antNS::NUM_SIMULTANEOUS_SIGNALS];
 	int signalIndex;
 	Behavior behavior;
+	Species species;
 
 	float cooldown;
 
@@ -28,9 +29,9 @@ public:
 	~Queen();
 	void draw();
 	void update(float frameTime);
-	void Reproduce(VECTOR2 location);
+	void Reproduce(VECTOR2 location,Species spc);
 	void create_Ant(VECTOR2 location);
-	void create(VECTOR2 location);
+	void create(VECTOR2 location,Species spc);
 	bool initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM);
 	void die();
 	void receiveSignal(Signal s);
@@ -47,5 +48,8 @@ public:
 
 	// Return age;
 	virtual float getAge()			const {return age;}
+
+	// Return species;
+	virtual Species getSpecies()			const {return species;}
 
 };

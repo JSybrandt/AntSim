@@ -87,4 +87,7 @@ public:
 	// Return name;
 	virtual std::string getName()			const {return name;}
 
+	// Return Species;
+	virtual Species getSpecies()			const {return species;}
+
 };

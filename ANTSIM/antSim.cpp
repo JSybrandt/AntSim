@@ -72,7 +72,7 @@ void AntSim::initialize(HWND hwnd)
 
 	redBase.initialize(this,64,64,0,&hillTex);
 	redBase.create(VECTOR2(3*GAME_WIDTH/4,3*GAME_HEIGHT/4), RED);
-	mouse.initialize(this,input,graphics, 0,0,0);
+	mouse.initialize(this, graphics, 0,0,0, &pherTex);
 
 
 
@@ -217,6 +217,7 @@ void AntSim::render()
 
 	if(input->getMouseRButton()) {
 		mouse.print();
+		mouse.draw();
 	}
 
 
@@ -244,7 +245,10 @@ void AntSim::resetAll()
 	return;
 }
 
-Ant* AntSim::spawnAnt(VECTOR2 loc)
+//=============================================================================
+// Spawning Functions
+//=============================================================================
+Ant* AntSim::spawnAnt(VECTOR2 loc, Species spc)
 {
 	Ant* result = nullptr;
 	for(int i = 0 ; i < antSimNS::MAX_ANTS; i++)
@@ -255,7 +259,7 @@ Ant* AntSim::spawnAnt(VECTOR2 loc)
 		//if selected ant is unused
 		if(!ants[antIndex].getActive())
 		{
-			ants[antIndex].create(loc);
+			ants[antIndex].create(loc, spc);
 			result = &ants[antIndex];
 			break;
 		}
