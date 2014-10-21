@@ -67,8 +67,11 @@ void AntSim::initialize(HWND hwnd)
 		ants[antIndex].create(VECTOR2(GAME_WIDTH/2,GAME_HEIGHT/2));
 	}
 
-	base.initialize(this,64,64,0,&hillTex);
-	base.setCenterLocation(VECTOR2(GAME_WIDTH/2,GAME_HEIGHT/2));
+	blackBase.initialize(this,64,64,0,&hillTex);
+	blackBase.create(VECTOR2(GAME_WIDTH/4,GAME_HEIGHT/4), BLACK);
+
+	redBase.initialize(this,64,64,0,&hillTex);
+	redBase.create(VECTOR2(3*GAME_WIDTH/4,3*GAME_HEIGHT/4), RED);
 	mouse.initialize(this,input,graphics, 0,0,0);
 
 
@@ -109,8 +112,8 @@ void AntSim::update()
 	}
 	else clickedLastFrame = false;
 
-
-	base.update(frameTime);
+	blackBase.update(frameTime);
+	redBase.update(frameTime);
 	mouse.update(frameTime);
 }
 
@@ -127,7 +130,7 @@ void AntSim::ai()
 void AntSim::collisions()
 {
 	VECTOR2 collision;
-	
+
 	//lopp ants
 	for(int j = 0; j < antSimNS::MAX_ANTS; j++)
 	{
@@ -138,7 +141,6 @@ void AntSim::collisions()
 			//if an ant is in range of the pheromone
 			if(pheromones[i].collidesWith(ants[j],collision))
 			{
-
 				ants[j].receiveSignal(pheromones[i].getSignal());
 			}
 		}
@@ -164,15 +166,28 @@ void AntSim::collisions()
 
 
 	}
-	for(int i = 0; i < antSimNS::MAX_ANTS; i++) {
-		if(input->getMouseRButton() && mouse.collidesWith(ants[i],collision)) {
-			mouse.getInfo(ants[i]);
+
+	//Mouse collision
+	bool found = false;
+	if(input->getMouseRButton()) {
+		for(int i = 0; i < antSimNS::MAX_ANTS; i++) {
+			if(mouse.collidesWith(ants[i],collision)) {
+				mouse.getInfo(ants[i]);
+				found = true;
+				break;
+			}
+		}
+		if(!found && mouse.collidesWith(blackBase,collision)) {
+			mouse.getInfo(blackBase);
+			found = true;
+		}
+		else if(!found && mouse.collidesWith(redBase,collision)) {
+			found = true;
+			mouse.getInfo(redBase);
 		}
 	}
-	if(input->getMouseRButton() && mouse.collidesWith(base,collision)) {
-			mouse.getInfo(base);
-	}
 
+	//End Function
 }
 
 //=============================================================================
@@ -182,7 +197,8 @@ void AntSim::render()
 {
 	graphics->spriteBegin();                // begin drawing sprites
 
-	base.draw();
+	blackBase.draw();
+	redBase.draw();
 
 	for(int i = 0 ; i < antSimNS::MAX_PHEROMONE; i++)
 	{

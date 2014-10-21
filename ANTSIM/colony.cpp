@@ -5,12 +5,13 @@
 Colony::Colony():Actor()
 {
 	age = 0;
-	resetRate = .05;
+	resetRate = 5;
 	foodLevel = colonyNS::STOMACH_SIZE;
-	alive = true;
+	alive = false;
 	spawnCooldown = 0;
-	setActive(true);
-	setScale(5);
+	setActive(false);
+	//radius = .01;
+	setScale(1);
 	name = "Colony";
 	pher = nullptr;
 }
@@ -58,10 +59,11 @@ void Colony::draw()
 	if(getActive()) Actor::draw();
 }
 
-void Colony::create(VECTOR2 location)
+void Colony::create(VECTOR2 location, Species s)
 {
 	setCenterLocation(location);
 	age = 0;
+	species = s;
 	setActive(true);
 	foodLevel = colonyNS::STOMACH_SIZE;
 	alive = true;

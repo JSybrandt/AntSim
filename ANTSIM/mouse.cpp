@@ -6,7 +6,7 @@ Mouse::Mouse()
 {
 	target = new Actor;
 	collisionType = CIRCLE;
-	radius = 10;
+	radius = 2;
 	selectedItem = -1;	//nothing return
 }
 
@@ -19,11 +19,21 @@ void Mouse::update(float frameTime) {
 	setCenterX(input->getMouseX()); 
 	setCenterY(input->getMouseY());
 
+
 	data.clear();
 	data.push_back(target->getName());
+	if(target->getSpecies() == BLACK) {
+		convert = "Species: Black";
+		data.push_back(convert);
+	}
+	else if(target->getSpecies() == RED) {
+		convert = "Species: Red";
+		data.push_back(convert);
+	}
 	convert = "Health: ";
 	convert += std::to_string(target->getHealth());
 	data.push_back(convert);
+
 	convert = "Food: ";
 	convert += std::to_string(target->getFood());
 	data.push_back(convert);
@@ -52,10 +62,10 @@ bool Mouse::initialize(AntSim *gamePtr, Input *in, Graphics *g, int width, int h
 	menuHeadingFont = new TextDX();
 	menuItemFontHighlight = new TextDX();
 	data.clear();
-	data.push_back("Ant");
-	data.push_back("Health: 100");
-	data.push_back("Food: 37");
-	data.push_back("Age: 5");
+	//data.push_back("Ant");
+	//data.push_back("Health: 100");
+	//data.push_back("Food: 37");
+	//data.push_back("Age: 5");
 	if(menuItemFont->initialize(graphics, 15, true, false, "Calibri") == false)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing menuItem font"));
 	if(menuItemFontHighlight->initialize(graphics, 18, true, false, "Calibri") == false)

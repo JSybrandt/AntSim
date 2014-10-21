@@ -126,6 +126,10 @@ class Actor : public Image
 
 	// Return name;
 	virtual std::string getName()			const {return "BAD";}
+
+	// Return species;
+	virtual Species getSpecies()			const {return UNKNOWN;}
+
     // Return collision type (NONE, CIRCLE, BOX, ROTATED_BOX)
     virtual COLLISION_TYPE getCollisionType() {return collisionType;}
 

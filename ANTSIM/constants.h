@@ -80,7 +80,8 @@ const UCHAR ENTER_KEY    = VK_RETURN;   // Enter key
 
 enum Species{
 	BLACK,
-	RED
+	RED,
+	UNKNOWN
 };
 
 #endif

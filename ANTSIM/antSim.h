@@ -29,7 +29,8 @@ private:
 	Ant ants[antSimNS::MAX_ANTS];
 	Food food[antSimNS::MAX_FOOD];
 	Pheromone pheromones[antSimNS::MAX_PHEROMONE];
-	Colony base;
+	Colony blackBase;
+	Colony redBase;
 	Mouse mouse;
 	int antIndex;
 	int foodIndex;

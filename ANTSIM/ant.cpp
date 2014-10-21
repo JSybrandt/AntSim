@@ -18,8 +18,7 @@ Ant::Ant():Actor()
 	pher = nullptr;
 }
 
-Ant::~Ant()
-{
+Ant::~Ant() {
 }
 
 void Ant::hungryAction(float frameTime)

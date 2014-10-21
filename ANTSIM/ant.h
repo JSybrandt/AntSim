@@ -86,4 +86,5 @@ public:
 	
 	// Return name;
 	virtual std::string getName()			const {return name;}
+
 };

@@ -20,8 +20,10 @@ class Colony: public Actor
 {
 private:
 	std::string name;
+	std::string color;
 	float age;
 	AntSim* world;
+	Species species;
 	float resetRate;
 	float foodLevel;		//amount of food in the colony
 	bool alive;
@@ -33,7 +35,7 @@ public:
 	~Colony();
 	void update(float frameTime);
 	void draw();
-	void create(VECTOR2 location);
+	void create(VECTOR2 location, Species s);
 	bool initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM);
 	void die();
 
@@ -43,4 +45,6 @@ public:
 
 	// Return name;
 	virtual std::string getName()			const {return name;}
+
+	virtual Species getSpecies()			const {return species;}
 };
