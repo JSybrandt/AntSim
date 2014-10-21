@@ -9,12 +9,15 @@ class AntSim;
 namespace antNS
 {
 	const float QUEEN_LIFE_EXPECTANCY = 30000;
-	const float LIFE_EXPECTANCY = 1000;
-	const float METABOLISM = 10;
+	const float LIFE_EXPECTANCY = 10;
+	const float YOUNG_AGE = LIFE_EXPECTANCY * 0.6;//NEC - ants are young when 1%-60% of life expectancy
+	const float MIDDLE_AGE = LIFE_EXPECTANCY * 0.9;//NEC - ants are middle aged when 60%-90% of life expectancy
+	const float OLD_AGE = LIFE_EXPECTANCY;//NEC - ants are old when 90%-100% of life expectancy
+	const float METABOLISM = 2;//NEC - Changed from 20 to 2 for testing
 	const float STOMACH_SIZE = 100;
 	const float QUEEN_STOMACH_SIZE = 200;
 	const float STARVATION_DAMAGE = 10;
-	const float OLD_AGE_DAMAGE = 10;
+	const float OLD_AGE_DAMAGE = 1;//NEC - Changed from 10 to 1 for testing
 	const float ANT_SPEED = 50;
 	const float ANT_MAX_HEALTH = 100;
 	const float QUEEN_MAX_HEALTH = 200;

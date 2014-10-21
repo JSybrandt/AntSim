@@ -72,59 +72,168 @@ void Ant::hungryAction(float frameTime)
 
 void Ant::defaultAction(float frameTime)
 {
-	if(pher == nullptr)
+	bool layingTrail = false;
+	
+	if(age < antNS::YOUNG_AGE)//NEC - work as a young ant
 	{
-		pher = world->spawnPher(*getCenter(),Signal(SignalType::ant_nearby,*getCenter(),species));
-	}
-	else
-	{
-		pher->refresh();
-		pher->setSignal(Signal(SignalType::beg,*getCenter(),species));
-	}
-
-	VECTOR2 currentDestination(-1,-1);
-	float strongestSignal = -1;
-	float distanceToClosest = 999999999999999;
-	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
-	{
-		//types of signals to consider
-		if(signals[i].getType()!=SignalType::null)
+		VECTOR2 currentDestination(-1,-1);
+		float strongestSignal = 0;
+		for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
 		{
-			//if the new signal is closer, use that
-			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
-			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
-
-			//go to the larger priority, or go to the closest
-			if(signals[i].getPriority() > strongestSignal || (signals[i].getPriority() == strongestSignal && currentDistanceSqrd<distanceToClosest))
+			if(signals[i].getPriority() > strongestSignal)
 			{
-				//set destination, reset distance
 				currentDestination = signals[i].getData();
 				strongestSignal=signals[i].getPriority();
-				distanceToClosest = currentDistanceSqrd;
+				
+				if(signals[i].getType()==SignalType::food)//NEC - lay breadcrumbs on way to food
+				{
+					layingTrail = true;
+					pher=world->spawnPher(*getCenter(),Signal(SignalType::food,signals[i].getData(),species));
+				}
 			}
-			
-		}//get largest priority
-	}//for
-
-	//if a valid destination was found
-	if(strongestSignal > -1)
-		moveInDirection(currentDestination,frameTime);
-
-	//wander aimlessly
-	else
-	{
-		//dont set new direction every frame
-		if(rand()%100>80){
-			//set new direction in front of ant
-			direction += ((rand()%1000)/1000.0)*PI/4 - PI/8;
 		}
+		//if we have a valid destination
+		if(currentDestination.x>0&&currentDestination.y>0)
+		{
+			//get vector from this to dest
+			currentDestination -= *getCenter();
+			D3DXVec2Normalize(&currentDestination,&currentDestination);
+			currentDestination *= antNS::ANT_SPEED*frameTime;
+			setCenterLocation(*getCenter()+currentDestination);
+			setRadians(atan2(currentDestination.y,currentDestination.x));
 
-		D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
-		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
-		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
-		aim.x = nx; aim.y=ny;
+			
+		}
+		//wander aimlessly
+		else
+		{
+			//dont set new direction every frame
+			if(rand()%100>80){
+				//set new direction in front of ant
+				direction += ((rand()%1000)/1000.0)*PI/4 - PI/8;
+			}
 
-		moveInDirection(aim,frameTime);
+			D3DXVECTOR2 aim(1,0);
+			float nx = cos(direction)*aim.x - sin(direction)*aim.y;
+			float ny = sin(direction)*aim.x + cos(direction)*aim.y;
+			aim.x = nx; aim.y=ny;
+			aim *= antNS::ANT_SPEED*frameTime;
+
+			setCenterLocation(*getCenter() + aim);
+
+			//move
+			setRadians(direction);
+		}
+	}
+	if(age < antNS::MIDDLE_AGE && age > antNS::YOUNG_AGE)//NEC - work as a middle aged ant
+	{
+		VECTOR2 currentDestination(-1,-1);
+		float strongestSignal = 0;
+		for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
+		{
+			if(signals[i].getPriority() > strongestSignal)
+			{
+				currentDestination = signals[i].getData();
+				strongestSignal=signals[i].getPriority();
+
+				if(signals[i].getType()==SignalType::ant_nearby 
+					&& signals[i].getSpecies() != species
+					&& health == antNS::ANT_MAX_HEALTH)//NEC - middle aged "soldiers" fight if nearby ant is of other species and if health is full
+				{
+					//TODO: fight
+				}
+				else
+				{
+					//TODO: run back to nest...leave danger pheromone?
+				}
+			}
+		}
+		//if we have a valid destination
+		if(currentDestination.x>0&&currentDestination.y>0)
+		{
+			//get vector from this to dest
+			currentDestination -= *getCenter();
+			D3DXVec2Normalize(&currentDestination,&currentDestination);
+			currentDestination *= antNS::ANT_SPEED*frameTime;
+			setCenterLocation(*getCenter()+currentDestination);
+			setRadians(atan2(currentDestination.y,currentDestination.x));
+		}
+		//patrol nest
+		else
+		{
+			//dont set new direction every frame
+			if(rand()%100>80){
+				if(getCenterX() > GAME_WIDTH/2 - 15 && getCenterX() <  GAME_WIDTH/2 + 15 &&
+					getCenterY() > GAME_HEIGHT/2 - 15 && getCenterY() <  GAME_HEIGHT/2 + 15)//NEC - if ant is within 15px from nest -> continue patrol
+				{
+					//set new direction in front of ant
+					direction += ((rand()%1000)/1000.0)*PI/4 - PI/8;
+				}
+				
+			}
+
+			D3DXVECTOR2 aim(1,0);
+			float nx = cos(direction)*aim.x - sin(direction)*aim.y;
+			float ny = sin(direction)*aim.x + cos(direction)*aim.y;
+			aim.x = nx; aim.y=ny;
+			aim *= antNS::ANT_SPEED*frameTime;
+
+			setCenterLocation(*getCenter() + aim);
+
+			//move
+			setRadians(direction);
+		}
+	}
+	if(age < antNS::OLD_AGE && age > antNS::MIDDLE_AGE)//NEC - work as an old ant
+	{
+		foodLevel = 200;//NEC - increasing old ants' food level
+		
+		VECTOR2 currentDestination(-1,-1);
+		float strongestSignal = 0;
+		for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
+		{
+			if(signals[i].getPriority() > strongestSignal)
+			{
+				currentDestination = signals[i].getData();
+				strongestSignal=signals[i].getPriority();
+
+				if(signals[i].getType()==SignalType::food)//NEC - lay breadcrumbs on way to food
+				{
+					layingTrail = true;
+					pher=world->spawnPher(*getCenter(),Signal(SignalType::food,signals[i].getData(),species));
+				}
+			}
+		}
+		//if we have a valid destination
+		if(currentDestination.x>0&&currentDestination.y>0)
+		{
+			//get vector from this to dest
+			currentDestination -= *getCenter();
+			D3DXVec2Normalize(&currentDestination,&currentDestination);
+			currentDestination *= antNS::ANT_SPEED*frameTime;
+			setCenterLocation(*getCenter()+currentDestination);
+			setRadians(atan2(currentDestination.y,currentDestination.x));
+		}
+		//wander aimlessly but much farther than young ants
+		else
+		{
+			//dont set new direction every frame
+			if(rand()%100>80){
+				//set new direction in front of ant
+				direction += ((rand()%1000)/1000.0)*PI/4 - PI/8;
+			}
+
+			D3DXVECTOR2 aim(1,0);
+			float nx = cos(direction)*aim.x - sin(direction)*aim.y;
+			float ny = sin(direction)*aim.x + cos(direction)*aim.y;
+			aim.x = nx; aim.y=ny;
+			aim *= (antNS::ANT_SPEED+20)*frameTime;
+
+			setCenterLocation(*getCenter() + aim + 20);
+
+			//move
+			setRadians(direction);
+		}
 	}
 }
 

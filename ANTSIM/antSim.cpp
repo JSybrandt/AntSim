@@ -85,6 +85,7 @@ void AntSim::update()
 	for(int i = 0 ; i < antSimNS::MAX_ANTS; i++)
 	{
 		ants[i].update(frameTime);
+
 	}
 
 	for(int i = 0 ; i < antSimNS::MAX_FOOD; i++)

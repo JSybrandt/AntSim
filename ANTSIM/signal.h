@@ -22,6 +22,7 @@ public:
 	VECTOR2 getData(){return data;}
 	int getPriority(){return (int)type;}
 	void setData(VECTOR2 d){data=d;}
+	Species getSpecies(){return species;}
 private:
 	//signals tell ants about a location
 	VECTOR2 data;
