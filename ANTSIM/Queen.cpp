@@ -49,10 +49,10 @@ void Queen::die()
 void Queen::hungryAction(float frameTime)
 {
 	//beg
-	if(cooldown == 0){
-		world->spawnPher(*getCenter(),Signal(SignalType::queen,*getCenter()));
-		cooldown += antNS::COOLDOWN;
+	if(pher == nullptr){
+		pher = world->spawnPher(*getCenter(),Signal(SignalType::queen,*getCenter()));
 	}
+	else pher->refresh();
 
 }
 
@@ -150,5 +150,5 @@ void Queen::touches(Actor* other)
 
 
 void Queen::Reproduce(VECTOR2 location,Species spc){
-	 Ant::create(location, spc);
+	 world->spawnAnt(location,spc);
 }

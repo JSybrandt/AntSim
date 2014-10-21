@@ -23,7 +23,7 @@ namespace antNS
 	const float QUEEN_MAX_HEALTH = 200;
 	const int NUM_SIMULTANEOUS_SIGNALS = 10;
 
-	const float COOLDOWN = 10;
+	const float ATTACK_COOLDOWN = 3;
 }
 
 enum Behavior{
@@ -36,7 +36,8 @@ enum Behavior{
 
 class Ant: public Actor
 {
-private:
+protected:
+	COLOR_ARGB color;
 	float age;
 	AntSim* world;
 	bool isUnderground;

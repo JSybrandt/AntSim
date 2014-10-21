@@ -57,7 +57,6 @@ void Ant::hungryAction(float frameTime)
 		//beg
 		if(pher==nullptr){
 			pher=world->spawnPher(*getCenter(),Signal(SignalType::beg,*getCenter(),species));
-			cooldown += antNS::COOLDOWN;
 		}
 		else
 		{
@@ -87,7 +86,7 @@ void Ant::defaultAction(float frameTime)
 				if(signals[i].getType()==SignalType::food)//NEC - lay breadcrumbs on way to food
 				{
 					layingTrail = true;
-					pher=world->spawnPher(*getCenter(),Signal(SignalType::food,signals[i].getData(),species));
+					//pher=world->spawnPher(*getCenter(),Signal(SignalType::food,signals[i].getData(),species));
 				}
 			}
 		}
@@ -139,7 +138,7 @@ void Ant::defaultAction(float frameTime)
 					&& signals[i].getSpecies() != species
 					&& health == antNS::ANT_MAX_HEALTH)//NEC - middle aged "soldiers" fight if nearby ant is of other species and if health is full
 				{
-					//TODO: fight
+					//TODO: fight (ants just need to walk toward enemy ants to fight
 				}
 				else
 				{
@@ -199,7 +198,7 @@ void Ant::defaultAction(float frameTime)
 				if(signals[i].getType()==SignalType::food)//NEC - lay breadcrumbs on way to food
 				{
 					layingTrail = true;
-					pher=world->spawnPher(*getCenter(),Signal(SignalType::food,signals[i].getData(),species));
+					//pher=world->spawnPher(*getCenter(),Signal(SignalType::food,signals[i].getData(),species));
 				}
 			}
 		}
@@ -288,8 +287,9 @@ void Ant::update(float frameTime)
 
 void Ant::draw()
 {
-	if(!isUnderground && getActive()) Actor::draw();
+	if(!isUnderground && getActive()) Actor::draw(color);
 }
+
 
 void Ant::create(VECTOR2 location,Species spc)
 {
@@ -304,6 +304,22 @@ void Ant::create(VECTOR2 location,Species spc)
 	alive = true;
 	health = antNS::ANT_MAX_HEALTH * (rand()%100/100.0)*25+75;
 	pher = nullptr;
+
+	switch (species)
+	{
+	case BLACK:
+		color = graphicsNS::BLACK;
+		break;
+	case RED:
+		color = graphicsNS::RED;
+		break;
+	case UNKNOWN:
+		color = graphicsNS::LTGRAY;
+		break;
+	default:
+		color = graphicsNS::WHITE;
+		break;
+	}
 }
 
 bool Ant::initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM)
