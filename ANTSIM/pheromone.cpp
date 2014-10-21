@@ -5,6 +5,7 @@ using namespace pheromoneNS;
 Pheromone::Pheromone()
 {
 	setActive(false);
+	setX(0); setY(0);
 }
 Pheromone::~Pheromone(){}
 
@@ -73,7 +74,6 @@ void Pheromone::update(float frameTime)
 			setSize(drawnRadius);
 			setCenterLocation(trueCenter);
 		}
-
 
 	}
 }

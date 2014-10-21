@@ -10,7 +10,7 @@ namespace pheromoneNS{
 	const float FOOD_LIFESPAN = 10;
 
 	const float COLONY_FOOD_RADIUS = 300;
-	const COLOR_ARGB COLONY_FOOD_COLOR = graphicsNS::YELLOW;
+	const COLOR_ARGB COLONY_FOOD_COLOR = graphicsNS::ALPHA50;
 	const float COLONY_FOOD_LIFESPAN = 10;
 
 	const float BEG_RADIUS = 30;

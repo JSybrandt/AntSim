@@ -24,6 +24,9 @@ namespace antNS
 	const int NUM_SIMULTANEOUS_SIGNALS = 10;
 
 	const float ATTACK_COOLDOWN = 3;
+	const float ATTACK_MIN_DAMAGE = 3;
+	const float ATTACK_MAX_DAMAGE = 10;
+
 }
 
 enum Behavior{
