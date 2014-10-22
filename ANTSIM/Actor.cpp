@@ -395,9 +395,9 @@ bool Actor::outsideRect(RECT rect)
 //=============================================================================
 void Actor::damage(int weapon)
 {
-	active = false;
-	velocity.x = 0;
-	velocity.y = 0;
+	health-=weapon;
+	if(health <=0)
+		active = false;
 }
 
 //=============================================================================

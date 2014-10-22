@@ -96,6 +96,7 @@ void Pheromone::setSize(float delR)
 {
 	//its better if no one touches this, it works because collision radius is dependent of scale
 	setScale(delR/rawRadius);
+	setCenterLocation(trueCenter);
 }
 
 void Pheromone::setCenterLocation(VECTOR2 newLoc)

@@ -31,11 +31,12 @@ void Colony::update(float frameTime)
 		if(pher == nullptr)
 		{
 			//the base has a low priority food signal
-			pher = world->spawnPher(*getCenter(),Signal(SignalType::colony_food,*getCenter()));
+			pher = world->spawnPher(*getCenter(),Signal(SignalType::colony_food,*getCenter(),species));
 		}
 		else
 		{
 			pher->refresh();
+			pher->setSize(pheromoneNS::COLONY_FOOD_RADIUS*(foodLevel/colonyNS::STOMACH_SIZE));
 		}
 
 		//Health, die.
@@ -80,4 +81,12 @@ void Colony::die()
 {
 	alive = false;
 	setActive(false);
+}
+
+
+float Colony::requestFood(float amount)
+{
+	amount = min(amount,foodLevel);
+	foodLevel-= amount;
+	return amount;
 }

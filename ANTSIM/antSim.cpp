@@ -94,17 +94,19 @@ void AntSim::update()
 	for(int i = 0 ; i < antSimNS::MAX_ANTS; i++)
 	{
 		ants[i].update(frameTime);
-
+		if(ants[i].getActive())placeAntObjectInProperRect(&ants[i]);
 	}
 
 	for(int i = 0 ; i < antSimNS::MAX_FOOD; i++)
 	{
 		food[i].update(frameTime);
+		if(food[i].getActive())placeObjectInProperRect(&food[i]);
 	}
 
 	for(int i = 0 ; i < antSimNS::MAX_PHEROMONE; i++)
 	{
 		pheromones[i].update(frameTime);
+		if(pheromones[i].getActive())placeObjectInProperRect(&pheromones[i]);
 	}
 
 	if(input->getMouseLButton())
@@ -120,7 +122,13 @@ void AntSim::update()
 
 	blackBase.update(frameTime);
 	redBase.update(frameTime);
+
+	placeObjectInProperRect(&blackBase);
+	placeObjectInProperRect(&redBase);
+
 	mouse.update(frameTime);
+
+
 }
 
 //=============================================================================
@@ -175,6 +183,11 @@ void AntSim::render()
 	blackBase.draw();
 	redBase.draw();
 
+	for(int i = 0 ; i < antSimNS::MAX_FOOD; i++)
+	{
+		food[i].draw();
+	}
+
 	for(int i = 0 ; i < antSimNS::MAX_PHEROMONE; i++)
 	{
 		pheromones[i].draw();
@@ -185,10 +198,6 @@ void AntSim::render()
 		ants[i].draw();
 	}
 
-	for(int i = 0 ; i < antSimNS::MAX_FOOD; i++)
-	{
-		food[i].draw();
-	}
 
 	if(input->getMouseRButton()) {
 		mouse.print();
@@ -300,15 +309,7 @@ AntSim::collisionRect::collisionRect()
 
 void AntSim::collisionRect::clear() {
 	ants.clear();
-	for(list<Actor*>::iterator obj = objects.begin(); obj != objects.end(); obj++){
-		if(!(*obj)->getActive()) {
-			auto old = obj;
-			obj++;
-			objects.erase(old);
-			if(obj == objects.end()) break;
-		}
-		//objects.clear();
-	}
+	objects.clear();
 }
 
 void AntSim::collisionRect::addAnt(Ant* in)

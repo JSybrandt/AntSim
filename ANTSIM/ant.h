@@ -23,9 +23,9 @@ namespace antNS
 	const float QUEEN_MAX_HEALTH = 200;
 	const int NUM_SIMULTANEOUS_SIGNALS = 10;
 
-	const float ATTACK_COOLDOWN = 3;
+	const float ATTACK_COOLDOWN = 0.25;
 	const float ATTACK_MIN_DAMAGE = 3;
-	const float ATTACK_MAX_DAMAGE = 10;
+	const float ATTACK_DAMAGE_RANGE = 7;
 
 }
 
@@ -64,6 +64,8 @@ protected:
 
 	//moves ant toward given location
 	void moveInDirection(VECTOR2 dir, float frameTime);
+
+	void wanderAimlessly(float frameTime);
 
 public:
 	Ant();

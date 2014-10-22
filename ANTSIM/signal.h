@@ -17,7 +17,7 @@ class Signal
 {
 public:
 	Signal(){type=SignalType::null;data=VECTOR2(-1,-1);}
-	Signal(SignalType t,VECTOR2 l,Species s = BLACK){data=l;type=t;species=s;};
+	Signal(SignalType t,VECTOR2 l,Species s = Species::UNKNOWN){data=l;type=t;species=s;};
 	SignalType getType(){return type;}
 	VECTOR2 getData(){return data;}
 	int getPriority(){return (int)type;}

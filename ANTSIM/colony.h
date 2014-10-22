@@ -47,4 +47,6 @@ public:
 	virtual std::string getName()			const {return name;}
 
 	virtual Species getSpecies()			const {return species;}
+
+	float requestFood(float amount);
 };

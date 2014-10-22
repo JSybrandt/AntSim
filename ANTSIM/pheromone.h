@@ -43,9 +43,10 @@ public:
 
 	//does not update data
 	void setCenterLocation(VECTOR2 newPos);
+	
+	void setSize(float desiredRad);
 
 private:
-	void setSize(float desiredRad);
 
 	Signal signal;
 	float age;
