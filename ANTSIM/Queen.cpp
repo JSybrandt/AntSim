@@ -12,7 +12,7 @@ Queen::Queen():Ant(){
 	setActive(false);
 	signalIndex = 0;
 	behavior = Behavior::DEFAULT;
-
+	pher = nullptr;
 	cooldown = 0;
 }
 
@@ -52,7 +52,10 @@ void Queen::hungryAction(float frameTime)
 	if(pher == nullptr){
 		pher = world->spawnPher(*getCenter(),Signal(SignalType::queen,*getCenter()));
 	}
-	else pher->refresh();
+	else{
+		pher->refresh();
+		pher->setSignal(Signal(SignalType::beg,*getCenter()));
+	}
 
 }
 
@@ -146,6 +149,13 @@ void Queen::touches(Actor* other)
 			foodLevel -= queen->receiveFood(foodLevel-antNS::QUEEN_STOMACH_SIZE/2);
 		}
 	}
+
+	Pheromone * pher =  dynamic_cast<Pheromone*>(other);
+	if(pher!=NULL)
+	{
+		receiveSignal(pher->getSignal());
+	}
+
 }
 
 

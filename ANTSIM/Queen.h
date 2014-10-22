@@ -1,8 +1,9 @@
 #pragma once
-#include "ant.h"
 #include "Actor.h"
 #include "signal.h"
 #include "food.h"
+#include "pheromone.h"
+#include "ant.h"
 
 class Queen:public Ant{
 

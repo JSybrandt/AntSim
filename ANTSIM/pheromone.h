@@ -20,10 +20,15 @@ namespace pheromoneNS{
 	const float ANT_NEARBY_RADIUS = 50;
 	const COLOR_ARGB ANT_NEARBY_COLOR = graphicsNS::BLUE;
 	const float ANT_NEARBY_LIFESPAN = 10;
+
+	const float QUEEN_RADIUS = 1000;
+	const COLOR_ARGB QUEEN_COLOR = graphicsNS::YELLOW;
+	const float QUEEN_LIFESPAN = 25;
 	
 	const float DEFAULT_RADIUS = 80;
 	const COLOR_ARGB DEFAULT_COLOR = graphicsNS::WHITE;
 	const float DEFAULT_LIFESPAN = 5;
+
 
 	const float DISSIPATION_RATE = 50;
 	const float MIN_RADIUS = 0;

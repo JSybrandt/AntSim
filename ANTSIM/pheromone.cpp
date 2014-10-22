@@ -35,6 +35,11 @@ void Pheromone::create(VECTOR2 loc, Signal s)
 		startingRadius = ANT_NEARBY_RADIUS;
 		lifeSpan = ANT_NEARBY_LIFESPAN;
 		break;
+	case SignalType::queen:
+		color = QUEEN_COLOR;
+		startingRadius = QUEEN_RADIUS;
+		lifeSpan = QUEEN_LIFESPAN;
+		break;
 	default:
 		color = DEFAULT_COLOR;
 		startingRadius = DEFAULT_RADIUS;
