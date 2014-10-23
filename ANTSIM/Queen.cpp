@@ -34,19 +34,6 @@ void Queen::create(VECTOR2 location,Species spc)
 	color = graphicsNS::YELLOW;
 }
 
-//float Queen::receiveFood(float avalible)
-//{
-//		float emptySpace = antNS::QUEEN_STOMACH_SIZE - foodLevel;
-//		avalible = min(emptySpace,avalible);
-//		foodLevel += avalible;
-//		return avalible;
-//}
-
-//void Queen::die()
-//{
-//	alive = false;
-//	setActive(false);
-//}
 
 void Queen::hungryAction(float frameTime)
 {
@@ -86,8 +73,6 @@ void Queen::update(float frameTime){
 		if(cooldown > 0) cooldown -= frameTime;
 		if(cooldown <= 0) cooldown = 0;
 
-		
-
 
 		//age
 		age += frameTime;
@@ -102,10 +87,10 @@ void Queen::update(float frameTime){
 		if(foodLevel < antNS::QUEEN_STOMACH_SIZE *0.25) behavior = Behavior::BEGGING;
 		else behavior = Behavior::DEFAULT;
 
-
 		if(behavior == Behavior::DEFAULT)
 		{
 			defaultAction(frameTime);
+
 		}
 		if(behavior == Behavior::BEGGING)
 		{
@@ -124,57 +109,11 @@ void Queen::update(float frameTime){
 	}
 }
 
-//void Queen::draw()
-//{
-//	if(!isUnderground && getActive()) Actor::draw(color);
-//}
-
 bool Queen::initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM)
 {
 	world = gamePtr;
 	return Actor::initialize((Game*)gamePtr,width,height,ncols,textureM);
 }
-
-//void Queen::receiveSignal(Signal s)
-//{
-//	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
-//	{
-//		if(signalIndex >= antNS::NUM_SIMULTANEOUS_SIGNALS) signalIndex = 0;
-//		if(signals[signalIndex].getType() == SignalType::null)
-//		{
-//			signals[signalIndex] = s;
-//			break;
-//		}
-//		signalIndex++;
-//	}
-//}
-
-//void Queen::touches(Actor* other)
-//{
-//	Food* food = dynamic_cast<Food*>(other);
-//	if(food != NULL)
-//	{
-//		//request to fill stomach
-//		foodLevel += food->eat(antNS::QUEEN_STOMACH_SIZE-foodLevel);
-//	}
-//
-//	Queen* queen = dynamic_cast<Queen*>(other);
-//	if(queen != NULL)
-//	{
-//		if(queen->getBehavior()==Behavior::BEGGING && foodLevel > antNS::QUEEN_STOMACH_SIZE/2)
-//		{
-//			foodLevel -= queen->receiveFood(foodLevel-antNS::QUEEN_STOMACH_SIZE/2);
-//		}
-//	}
-//
-//	Pheromone * pher =  dynamic_cast<Pheromone*>(other);
-//	if(pher!=NULL)
-//	{
-//		receiveSignal(pher->getSignal());
-//	}
-//
-//}
-
 
 void Queen::Reproduce(VECTOR2 location,Species spc){
 	 world->spawnAnt(location,spc);

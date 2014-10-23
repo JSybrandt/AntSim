@@ -54,10 +54,15 @@ protected:
 	Behavior lastFrame;
 	Species species;
 
+	float distSqrdFromQueen;
+
 	float cooldown;
 
 	//different versions of update based on behavior
-	void defaultAction(float frameTime);
+	void youngDefaultAction(float frameTime);//NEC - young ants will wander in search of food in small radius of nest
+	void middleDefaultAction(float frameTime);//NEC - middle ants will patrol medium radius of nest
+	void oldDefaultAction(float frameTime);//NEC - old ants will wander in search of food in large radius of nest
+	
 	void hungryAction(float frameTime);
 
 	Pheromone* pher;
@@ -65,7 +70,9 @@ protected:
 	//moves ant toward given location
 	void moveInDirection(VECTOR2 dir, float frameTime);
 
-	void wanderAimlessly(float frameTime);
+	void youngWanderAimlessly(float frameTime);//NEC - this hungry action will be called by youngDefaultAction
+	void middleWanderAimlessly(float frameTime);//NEC - this hungry action will be called by middleDefaultAction
+	void oldWanderAimlessly(float frameTime);//NEC - this hungry action will be called by oldDefaultAction
 
 public:
 	Ant();

@@ -12,10 +12,10 @@ namespace queenNS{
 class Queen:public Ant{
 
 
+
 	//different versions of update based on behavior
 	void defaultAction(float frameTime);
 	void hungryAction(float frameTime);
-
 
 public:
 	Queen();
@@ -24,5 +24,8 @@ public:
 	void Reproduce(VECTOR2 location,Species spc);
 	void create(VECTOR2 location,Species spc);
 	bool initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM);
+
+	//void setLocation(D3DXVECTOR2 loc) {location.setData(loc);}
+	//D3DXVECTOR2 getLocation() {return location.getData();}
 
 };
