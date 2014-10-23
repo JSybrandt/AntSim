@@ -41,7 +41,7 @@ void Food::update(float frameTime)
 {
 	if(getActive())
 	{
-		pher->refresh();
+		if(pher != nullptr)pher->refresh();
 		age += frameTime;
 		if(age >= foodNS::LIFE_SPAN || value <= 0) setActive(false);
 		

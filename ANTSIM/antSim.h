@@ -27,8 +27,8 @@
 
 namespace antSimNS
 {
-	const int MAX_PHEROMONE = 100;
-	const int MAX_ANTS = 100;
+	const int MAX_PHEROMONE = 1000;
+	const int MAX_ANTS = 1000;
 	const int MAX_FOOD = 100;
 	const int STARTING_ANTS = 0;
 	const int HOR_NUM_COL_RECTS = 10;

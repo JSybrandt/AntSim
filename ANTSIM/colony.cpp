@@ -48,7 +48,7 @@ void Colony::update(float frameTime)
 		else
 		{
 			pher->refresh();
-			pher->setSize(pheromoneNS::COLONY_FOOD_RADIUS*(foodLevel/colonyNS::STOMACH_SIZE));
+			//pher->setSize(pheromoneNS::COLONY_FOOD_RADIUS*(foodLevel/colonyNS::STOMACH_SIZE));
 		}
 
 		//Health, die.

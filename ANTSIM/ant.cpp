@@ -42,34 +42,48 @@ void Ant::youngWanderAimlessly(float frameTime)
 
 	D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
 
-	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
+	//go to the larger priority, or go to the closest
+	if(distSqrdFromQueen < 200)//NEC if ant has enough food and signal is queen, go to her and deposit
 	{
-		//types of signals to consider
-		if((signals[i].getType()==SignalType::queen && signals[i].getSpecies()==species))
-		{
-			//distance to queen
-			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
-			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
-
-			//go to the larger priority, or go to the closest
-			if(currentDistanceSqrd < 200)//NEC if ant has enough food and signal is queen, go to her and deposit
-			{
-				if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/4 - PI/8;
-			}
-			else if (currentDistanceSqrd > 200)
-			{
-				wander = false;
-				aim = signals[i].getData();
-			}
-
-		}//get largest priority
-	}//for
+		if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/8 - PI/16;
+	}
+	else
+	{
+		wander = false;
+		currentDestination = queenLoc;
+	}
 	
-	if(strongestSignal > -1 && wander == false)
+	//for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
+	//{
+	//	//types of signals to consider
+	//	if((signals[i].getType()==SignalType::queen && signals[i].getSpecies()==species))
+	//	{
+	//		//distance to queen
+	//		VECTOR2 distToSignal = signals[i].getData()-*getCenter();
+	//		float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
+
+	//		//go to the larger priority, or go to the closest
+	//		if(currentDistanceSqrd < 200)//NEC if ant has enough food and signal is queen, go to her and deposit
+	//		{
+	//			if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/4 - PI/8;
+	//		}
+	//		else if (currentDistanceSqrd > 200)
+	//		{
+	//			wander = false;
+	//			aim = signals[i].getData();
+	//		}
+
+	//	}//get largest priority
+	//}//for
+	
+	if(wander == false)
 		moveInDirection(currentDestination,frameTime);
 	else if(wander == true)
 	{
-		moveInDirection(aim,frameTime);
+		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
+		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
+		aim.x = nx; aim.y=ny;
+		moveInDirection(aim+*getCenter(),frameTime);
 	}
 }
 
@@ -82,34 +96,51 @@ void Ant::middleWanderAimlessly(float frameTime)
 
 	D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
 
-	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
+
+	//go to the larger priority, or go to the closest
+	if(distSqrdFromQueen < 50)//NEC if ant has enough food and signal is queen, go to her and deposit
 	{
-		//types of signals to consider
-		if((signals[i].getType()==SignalType::queen && signals[i].getSpecies()==species))
-		{
-			//distance to queen
-			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
-			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
+		if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/8 - PI/16;
+	}
+	else
+	{
+		wander = false;
+		currentDestination = queenLoc;
+	}
 
-			//go to the larger priority, or go to the closest
-			if(currentDistanceSqrd < 50)//NEC if ant has enough food and signal is queen, go to her and deposit
-			{
-				if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/4 - PI/8;
-			}
-			else if (currentDistanceSqrd > 50)
-			{
-				wander = false;
-				aim = signals[i].getData();
-			}
 
-		}//get largest priority
-	}//for
-	
-	if(strongestSignal > -1 && wander == false)
+	//for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
+	//{
+	//	//types of signals to consider
+	//	if((signals[i].getType()==SignalType::queen && signals[i].getSpecies()==species))
+	//	{
+	//		//distance to queen
+	//		VECTOR2 distToSignal = signals[i].getData()-*getCenter();
+	//		float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
+
+	//		//go to the larger priority, or go to the closest
+	//		if(currentDistanceSqrd < 50)//NEC if ant has enough food and signal is queen, go to her and deposit
+	//		{
+	//			if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/4 - PI/8;
+	//		}
+	//		else if (currentDistanceSqrd > 50)
+	//		{
+	//			wander = false;
+	//			aim = signals[i].getData();
+	//		}
+
+	//	}//get largest priority
+	//}//for
+	//
+
+	if( wander == false)
 		moveInDirection(currentDestination,frameTime);
 	else if(wander == true)
 	{
-		moveInDirection(aim,frameTime);
+		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
+		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
+		aim.x = nx; aim.y=ny;
+		moveInDirection(aim+*getCenter(),frameTime);
 	}
 }
 
@@ -122,37 +153,51 @@ void Ant::oldWanderAimlessly(float frameTime)
 
 	D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
 
-	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
+	//go to the larger priority, or go to the closest
+	if(distSqrdFromQueen < 1000)//NEC if ant has enough food and signal is queen, go to her and deposit
 	{
-		//types of signals to consider
-		if((signals[i].getType()==SignalType::queen && signals[i].getSpecies()==species))
-		{
-			//distance to queen
-			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
-			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
+		if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/8 - PI/16;
+	}
+	else
+	{
+		wander = false;
+		currentDestination = queenLoc;
+	}
 
-			//go to the larger priority, or go to the closest
-			if(currentDistanceSqrd < 1000)
-			{
-				if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/4 - PI/8;
-			}
-			else if (currentDistanceSqrd > 1000)
-			{
-				wander = false;
-				aim = signals[i].getData();
-			}
+	//for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
+	//{
+	//	//types of signals to consider
+	//	if((signals[i].getType()==SignalType::queen && signals[i].getSpecies()==species))
+	//	{
+	//		//distance to queen
+	//		VECTOR2 distToSignal = signals[i].getData()-*getCenter();
+	//		float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
 
-		}//get largest priority
-	}//for
+	//		//go to the larger priority, or go to the closest
+	//		if(currentDistanceSqrd < 1000)
+	//		{
+	//			if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/4 - PI/8;
+	//		}
+	//		else if (currentDistanceSqrd > 1000)
+	//		{
+	//			wander = false;
+	//			aim = signals[i].getData();
+	//		}
+
+	//	}//get largest priority
+	//}//for
 	
-	if(strongestSignal > -1 && wander == false)
+	if(wander == false)
 	{
 		moveInDirection(currentDestination,frameTime);
 		wander = true;
 	}
 	else if(wander == true)
 	{
-		moveInDirection(aim,frameTime);
+		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
+		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
+		aim.x = nx; aim.y=ny;
+		moveInDirection(aim+*getCenter(),frameTime);
 	}
 }
 
@@ -383,7 +428,8 @@ void Ant::update(float frameTime)
 			if(signals[i].getType()==SignalType::queen && signals[i].getSpecies()==species)
 			{
 				VECTOR2 queenDisp = (signals[i].getData()-*getCenter());
-				distSqrdFromQueen = queenDisp.x*queenDisp.x+queenDisp.y*queenDisp.y;
+				distSqrdFromQueen = sqrt(queenDisp.x*queenDisp.x+queenDisp.y*queenDisp.y);
+				queenLoc = signals[i].getData();
 				break;
 			}
 		}
@@ -537,8 +583,12 @@ void Ant::touches(Actor* other)
 	Colony * colony =  dynamic_cast<Colony*>(other);
 	if(colony!=NULL)
 	{
-		//request to fill stomach
-		foodLevel += colony->requestFood(antNS::STOMACH_SIZE-foodLevel);
+		if(foodLevel > antNS::STOMACH_SIZE*0.8)
+			//put food in
+			foodLevel += colony->requestFood(-foodLevel*0.3);
+		else
+			//request to fill stomach
+			foodLevel += colony->requestFood(antNS::STOMACH_SIZE-foodLevel);
 	}
 }
 
