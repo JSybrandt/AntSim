@@ -1,6 +1,7 @@
 #pragma once
 #include "Actor.h"
 #include "pheromone.h"
+#include "Queen.h"
 
 class AntSim;
 
@@ -29,6 +30,7 @@ private:
 	bool alive;
 	Pheromone * pher;
 	float spawnCooldown;
+	Queen* queen;
 
 public:
 	Colony();

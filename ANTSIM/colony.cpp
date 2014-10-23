@@ -2,6 +2,8 @@
 
 #include "antSim.h"
 
+#include "Queen.h"
+
 Colony::Colony():Actor()
 {
 	age = 0;
@@ -14,6 +16,7 @@ Colony::Colony():Actor()
 	setScale(2);
 	name = "Colony";
 	pher = nullptr;
+	queen = nullptr;
 }
 
 Colony::~Colony()
@@ -44,11 +47,11 @@ void Colony::update(float frameTime)
 
 		spawnCooldown -= frameTime;
 
-		if(spawnCooldown <= 0)
+		/*if(spawnCooldown <= 0)
 		{
 			world->spawnAnt(*getCenter(), getSpecies());
 			spawnCooldown += resetRate;
-		}
+		}*/
 		
 
 	}
@@ -69,6 +72,8 @@ void Colony::create(VECTOR2 location, Species s)
 	foodLevel = colonyNS::STOMACH_SIZE;
 	alive = true;
 	health = colonyNS::COLONY_MAX_HEALTH * (rand()%100/100)*25+75;
+	queen = world->spawnQueen(location,species);
+
 }
 
 bool Colony::initialize(AntSim *gamePtr, int width, int height, int ncols,TextureManager *textureM)

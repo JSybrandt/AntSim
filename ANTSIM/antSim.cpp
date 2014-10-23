@@ -78,9 +78,11 @@ void AntSim::initialize(HWND hwnd)
 
 	redBase.initialize(this,64,64,0,&hillTex);
 	redBase.create(VECTOR2(3*GAME_WIDTH/4,3*GAME_HEIGHT/4), RED);
+
 	mouse.initialize(this, graphics, 0,0,0, &pherTex);
 
-
+	blackQueen.initialize(this,0,0,0,&antTex);
+	redQueen.initialize(this,0,0,0,&antTex);
 
 	return;
 }
@@ -108,6 +110,19 @@ void AntSim::update()
 		pheromones[i].update(frameTime);
 		if(pheromones[i].getActive())placeObjectInProperRect(&pheromones[i]);
 	}
+
+	if(blackQueen.getActive())
+	{
+		blackQueen.update(frameTime);
+		placeAntObjectInProperRect(&blackQueen);
+	}
+
+	if(redQueen.getActive())
+	{
+		redQueen.update(frameTime);
+		placeAntObjectInProperRect(&redQueen);
+	}
+
 
 	if(input->getMouseLButton())
 	{
@@ -148,6 +163,7 @@ void AntSim::collisions()
 	for(int i = 0 ; i  < antSimNS::HOR_NUM_COL_RECTS;  i++)
 		for(int j = 0 ; j  < antSimNS::HOR_NUM_COL_RECTS;  j++) {
 			colRects[i][j].checkCollisions();
+			colRects[i][j].clear();
 		}
 
 	//Mouse collision
@@ -204,12 +220,10 @@ void AntSim::render()
 		mouse.draw();
 	}
 
-	for(int i = 0 ; i  < antSimNS::HOR_NUM_COL_RECTS;  i++)
-		for(int j = 0 ; j  < antSimNS::HOR_NUM_COL_RECTS;  j++) {
-			debugText.print(std::to_string(i)+","+std::to_string(j) + ":" + std::to_string(colRects[i][j].objects.size()+colRects[i][j].ants.size()),i*rectWidth,j*rectHeight);
-			colRects[i][j].clear();
-		}
-		graphics->spriteEnd();                  // end drawing sprites	
+	blackQueen.draw();
+	redQueen.draw();
+
+	graphics->spriteEnd();                  // end drawing sprites	
 }
 
 //=============================================================================
@@ -252,6 +266,22 @@ Ant* AntSim::spawnAnt(VECTOR2 loc, Species spc)
 			break;
 		}
 		antIndex++;
+	}
+	return result;
+}
+
+Queen* AntSim::spawnQueen(VECTOR2 loc, Species spc)
+{
+	Queen* result = nullptr;
+	if(spc==BLACK)
+	{
+		blackQueen.create(loc,spc);
+		result = &blackQueen;
+	}
+	else if(spc==RED)
+	{
+		redQueen.create(loc,spc);
+		result = &redQueen;
 	}
 	return result;
 }

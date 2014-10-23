@@ -36,7 +36,10 @@ void Pheromone::create(VECTOR2 loc, Signal s)
 		lifeSpan = ANT_NEARBY_LIFESPAN;
 		break;
 	case SignalType::queen:
-		color = QUEEN_COLOR;
+		if(s.getSpecies()==BLACK)
+			color = graphicsNS::ALPHA50&graphicsNS::BLACK;
+		if(s.getSpecies()==RED)
+			color = graphicsNS::ALPHA50&graphicsNS::RED;
 		startingRadius = QUEEN_RADIUS;
 		lifeSpan = QUEEN_LIFESPAN;
 		break;

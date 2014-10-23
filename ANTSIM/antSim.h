@@ -10,6 +10,8 @@
 #include "pheromone.h"
 #include "mouse.h"
 
+#include "Queen.h"
+
 //for collision rect
 #include<list>
 
@@ -51,6 +53,8 @@ private:
 	Ant ants[antSimNS::MAX_ANTS];
 	Food food[antSimNS::MAX_FOOD];
 	Pheromone pheromones[antSimNS::MAX_PHEROMONE];
+	Queen redQueen;
+	Queen blackQueen;
 	Colony blackBase;
 	Colony redBase;
 	Mouse mouse;
@@ -82,6 +86,7 @@ public:
 	Ant* spawnAnt(VECTOR2 loc, Species spc);
 	Food* spawnFood(VECTOR2 loc);
 	Pheromone* spawnPher(VECTOR2 loc, Signal s);
+	Queen* spawnQueen(VECTOR2 loc, Species spc);
 
 	//call for static objects once, call for ants every frame
 	void placeObjectInProperRect(Actor* in);
