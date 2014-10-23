@@ -20,6 +20,7 @@ AntSim::AntSim() {
 	clickedLastFrame = false;
 	rectWidth = float(GAME_WIDTH)/antSimNS::HOR_NUM_COL_RECTS;
 	rectHeight = float(GAME_HEIGHT)/antSimNS::HOR_NUM_COL_RECTS;
+
 }
 
 //=============================================================================
@@ -75,12 +76,15 @@ void AntSim::initialize(HWND hwnd)
 
 	blackBase.initialize(this,64,64,0,&hillTex);
 	blackBase.create(VECTOR2(GAME_WIDTH/4,GAME_HEIGHT/4), BLACK);
+	blackQueen.create(VECTOR2(GAME_WIDTH/4,GAME_HEIGHT/4), BLACK);//NEC
+	blackQueen.setLocation(*getBlackCenter());
+
 
 	redBase.initialize(this,64,64,0,&hillTex);
 	redBase.create(VECTOR2(3*GAME_WIDTH/4,3*GAME_HEIGHT/4), RED);
 	mouse.initialize(this, graphics, 0,0,0, &pherTex);
-
-
+	redQueen.create(VECTOR2(3*GAME_WIDTH/4,3*GAME_HEIGHT/4), RED);//NEC
+	redQueen.setLocation(*getRedCenter());
 
 	return;
 }
@@ -122,6 +126,9 @@ void AntSim::update()
 
 	blackBase.update(frameTime);
 	redBase.update(frameTime);
+	//blackQueen.update(frameTime);//NEC
+	//redQueen.update(frameTime);//NEC
+
 
 	placeObjectInProperRect(&blackBase);
 	placeObjectInProperRect(&redBase);
@@ -284,6 +291,7 @@ Pheromone* AntSim::spawnPher(VECTOR2 loc, Signal s)
 	for(int i = 0 ; i < antSimNS::MAX_PHEROMONE; i++)
 	{
 		//loop index if end is reached
+		
 		if(pherIndex >= antSimNS::MAX_PHEROMONE) pherIndex = 0;
 
 		//if selected ant is unused

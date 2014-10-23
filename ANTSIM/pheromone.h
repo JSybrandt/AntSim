@@ -21,8 +21,8 @@ namespace pheromoneNS{
 	const COLOR_ARGB ANT_NEARBY_COLOR = graphicsNS::BLUE;
 	const float ANT_NEARBY_LIFESPAN = 10;
 
-	const float QUEEN_RADIUS = 1000;
-	const COLOR_ARGB QUEEN_COLOR = graphicsNS::YELLOW;
+	const float QUEEN_RADIUS = 100000;//NEC
+	const COLOR_ARGB QUEEN_COLOR = graphicsNS::BLACK;
 	const float QUEEN_LIFESPAN = 25;
 	
 	const float DEFAULT_RADIUS = 80;

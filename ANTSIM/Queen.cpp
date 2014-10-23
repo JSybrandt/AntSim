@@ -30,6 +30,7 @@ void Queen::create(VECTOR2 location,Species spc)
 	foodLevel = antNS::QUEEN_STOMACH_SIZE;
 	alive = true;
 	health = antNS::QUEEN_MAX_HEALTH;
+	//pher->setCenterLocation(*getCenter());//NEC
 }
 
 float Queen::receiveFood(float avalible)
@@ -61,8 +62,17 @@ void Queen::hungryAction(float frameTime)
 
 void Queen::defaultAction(float frameTime){
 
+	/*if(pher == nullptr)
+	{
+		pher = world->spawnPher(*getCenter(),Signal(SignalType::queen,*getCenter(),species));
+	}
+	else
+	{
+		pher->refresh();
+		pher->setSignal(Signal(SignalType::ant_nearby,*getCenter(),species));
+	}*/
 	VECTOR2 location;
-	Reproduce(location, species);
+	//Reproduce(location, species);
 
 }
 
@@ -85,10 +95,17 @@ void Queen::update(float frameTime){
 		if(foodLevel < antNS::QUEEN_STOMACH_SIZE *0.25) behavior = Behavior::BEGGING;
 		else behavior = Behavior::DEFAULT;
 
+		
+		//NEC
+		/*if(pher == nullptr)
+		{
+			pher = world->spawnPher(*getCenter(),Signal(SignalType::ant_nearby,*getCenter(),species));
+		}*/
 
 		if(behavior == Behavior::DEFAULT)
 		{
 			defaultAction(frameTime);
+
 		}
 		if(behavior == Behavior::BEGGING)
 		{

@@ -1,6 +1,8 @@
 #include "ant.h"
 #include "antSim.h"
 
+#include <cmath>//NEC
+
 Ant::Ant():Actor()
 {
 	age = 0;
@@ -21,26 +23,153 @@ Ant::Ant():Actor()
 Ant::~Ant() {
 }
 
-void Ant::wanderAimlessly(float frameTime)
+void Ant::youngWanderAimlessly(float frameTime)
 {
-	//dont set new direction every frame
-	if(rand()%100>80){
-		//set new direction in front of ant
-		direction += ((rand()%10)/10.0)*PI/4 - PI/8;
-	}
+	//NEC - next 4 lines - checking positive distance from both bases: Then if statement will check whether ant can wander or must head back to base
+	int distanceFromBlackX = abs(world->getBlackBaseX() - getX());
+	int distanceFromBlackY = abs(world->getBlackBaseY() - getY());
+
+	int distanceFromRedX = abs(world->getRedBaseX() - getX());
+	int distanceFromRedY = abs(world->getRedBaseY() - getY());
 
 	D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
-	float nx = cos(direction)*aim.x - sin(direction)*aim.y;
-	float ny = sin(direction)*aim.x + cos(direction)*aim.y;
-	aim.x = nx; aim.y=ny;
-	aim += *getCenter();
+	D3DXVECTOR2 aim2(antNS::ANT_SPEED,0);
+	bool outOfBounds = false;
 
-	moveInDirection(aim,frameTime);
+	if((species == RED &&  distanceFromRedX < 300 && distanceFromRedY < 300) ||
+		(species == BLACK &&  distanceFromBlackX < 300 && distanceFromBlackY < 300))
+	{
+		//NEC - If in bounds of where a young ant should be -> wander
+		if(rand()%100>80)
+		{
+			direction += ((rand()%10)/10.0)*PI/4 - PI/8;
+		}
+	}
+	else
+	{
+		outOfBounds = true;
+
+		if(species == RED) aim2 = *world->getRedCenter();
+		if(species == BLACK) aim2 = *world->getBlackCenter();
+	}
+
+	//dont set new direction every frame
+
+	if(outOfBounds)
+	{
+		moveInDirection(aim2,frameTime);
+		direction *= -1;
+		//outOfBounds = false;
+	}
+	else
+	{
+		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
+		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
+		aim.x = nx; aim.y=ny;
+		aim += *getCenter();
+		moveInDirection(aim,frameTime);
+	}
+}
+
+void Ant::middleWanderAimlessly(float frameTime)
+{
+	//NEC - next 4 lines - checking positive distance from both bases: Then if statement will check whether ant can wander or must head back to base
+	int distanceFromBlackX = abs(world->getBlackBaseX() - getX());
+	int distanceFromBlackY = abs(world->getBlackBaseY() - getY());
+
+	int distanceFromRedX = abs(world->getRedBaseX() - getX());
+	int distanceFromRedY = abs(world->getRedBaseY() - getY());
+
+	D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
+	D3DXVECTOR2 aim2(antNS::ANT_SPEED,0);
+	bool outOfBounds = false;
+
+	if((species == RED &&  distanceFromRedX < 150 && distanceFromRedY < 150) ||
+		(species == BLACK &&  distanceFromBlackX < 150 && distanceFromBlackY < 150))
+	{
+		//NEC - If in bounds of where a young ant should be -> wander
+		if(rand()%100>80)
+		{
+			direction += ((rand()%10)/10.0)*PI/4 - PI/8;
+		}
+	}
+	else
+	{
+		outOfBounds = true;
+
+		if(species == RED) aim2 = *world->getRedCenter();
+		if(species == BLACK) aim2 = *world->getBlackCenter();
+	}
+
+	//dont set new direction every frame
+
+	if(outOfBounds)
+	{
+		moveInDirection(aim2,frameTime);
+		direction *= -1;
+		//outOfBounds = false;
+	}
+	else
+	{
+		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
+		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
+		aim.x = nx; aim.y=ny;
+		aim += *getCenter();
+		moveInDirection(aim,frameTime);
+	}
+}
+
+void Ant::oldWanderAimlessly(float frameTime)
+{
+	//NEC - next 4 lines - checking positive distance from both bases: Then if statement will check whether ant can wander or must head back to base
+	int distanceFromBlackX = abs(world->getBlackBaseX() - getX());
+	int distanceFromBlackY = abs(world->getBlackBaseY() - getY());
+
+	int distanceFromRedX = abs(world->getRedBaseX() - getX());
+	int distanceFromRedY = abs(world->getRedBaseY() - getY());
+
+	D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
+	D3DXVECTOR2 aim2(antNS::ANT_SPEED,0);
+	bool outOfBounds = false;
+
+	if((species == RED &&  distanceFromRedX < 600 && distanceFromRedY < 600) ||
+		(species == BLACK &&  distanceFromBlackX < 600 && distanceFromBlackY < 600))
+	{
+		//NEC - If in bounds of where a young ant should be -> wander
+		if(rand()%100>80)
+		{
+			direction += ((rand()%10)/10.0)*PI/4 - PI/8;
+		}
+	}
+	else
+	{
+		outOfBounds = true;
+
+		if(species == RED) aim2 = *world->getRedCenter();
+		if(species == BLACK) aim2 = *world->getBlackCenter();
+	}
+
+	//dont set new direction every frame
+
+	if(outOfBounds)
+	{
+		moveInDirection(aim2,frameTime);
+		direction *= -1;
+		//outOfBounds = false;
+	}
+	else
+	{
+		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
+		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
+		aim.x = nx; aim.y=ny;
+		aim += *getCenter();
+		moveInDirection(aim,frameTime);
+	}
 }
 
 void Ant::hungryAction(float frameTime)
 {
-	
+
 
 	VECTOR2 currentDestination(-1,-1);
 	float strongestSignal = -1;
@@ -62,12 +191,12 @@ void Ant::hungryAction(float frameTime)
 				strongestSignal=signals[i].getPriority();
 				distanceToClosest = currentDistanceSqrd;
 			}
-			
+
 		}//get largest priority
 	}//for
 
 
-	
+
 
 	if(currentDestination == VECTOR2(-1,-1))
 	{
@@ -81,7 +210,7 @@ void Ant::hungryAction(float frameTime)
 			pher->setSignal(Signal(SignalType::beg,*getCenter()));
 		}
 
-		wanderAimlessly(frameTime);
+		youngWanderAimlessly(frameTime);
 	}
 	else
 	{
@@ -91,7 +220,8 @@ void Ant::hungryAction(float frameTime)
 
 }
 
-void Ant::defaultAction(float frameTime)
+//NEC - young ants will wander in search of food in small radius of base
+void Ant::youngDefaultAction(float frameTime)
 {
 	if(pher == nullptr)
 	{
@@ -123,7 +253,7 @@ void Ant::defaultAction(float frameTime)
 				strongestSignal=signals[i].getPriority();
 				distanceToClosest = currentDistanceSqrd;
 			}
-			
+
 		}//get largest priority
 	}//for
 
@@ -134,7 +264,103 @@ void Ant::defaultAction(float frameTime)
 	//wander aimlessly
 	else
 	{
-		wanderAimlessly(frameTime);
+		youngWanderAimlessly(frameTime);
+	}
+}
+
+//NEC - middle ants will patrol medium radius of base for other species
+void Ant::middleDefaultAction(float frameTime)
+{
+	if(pher == nullptr)
+	{
+		pher = world->spawnPher(*getCenter(),Signal(SignalType::ant_nearby,*getCenter(),species));
+	}
+	else
+	{
+		pher->refresh();
+		pher->setSignal(Signal(SignalType::ant_nearby,*getCenter(),species));
+	}
+
+	VECTOR2 currentDestination(-1,-1);
+	float strongestSignal = -1;
+	float distanceToClosest = 999999999999999;
+	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
+	{
+		//types of signals to consider
+		if(signals[i].getType()!=SignalType::null && signals[i].getSpecies()!=species)
+		{
+			//if the new signal is closer, use that
+			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
+			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
+
+			//go to the larger priority, or go to the closest
+			if(signals[i].getPriority() > strongestSignal || (signals[i].getPriority() == strongestSignal && currentDistanceSqrd<distanceToClosest))
+			{
+				//set destination, reset distance
+				currentDestination = signals[i].getData();
+				strongestSignal=signals[i].getPriority();
+				distanceToClosest = currentDistanceSqrd;
+			}
+
+		}//get largest priority
+	}//for
+
+	//if a valid destination was found
+	if(strongestSignal > -1)
+		moveInDirection(currentDestination,frameTime);
+
+	//wander aimlessly
+	else
+	{
+		middleWanderAimlessly(frameTime);
+	}
+}
+
+//NEC - old ants will wander in search of food in large radius of base
+void Ant::oldDefaultAction(float frameTime)
+{		
+	if(pher == nullptr)
+	{
+		pher = world->spawnPher(*getCenter(),Signal(SignalType::ant_nearby,*getCenter(),species));
+	}
+	else
+	{
+		pher->refresh();
+		pher->setSignal(Signal(SignalType::ant_nearby,*getCenter(),species));
+	}
+
+	VECTOR2 currentDestination(-1,-1);
+	float strongestSignal = -1;
+	float distanceToClosest = 999999999999999;
+	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
+	{
+		//types of signals to consider
+		if(signals[i].getType()!=SignalType::null && signals[i].getSpecies()!=species)
+		{
+			//if the new signal is closer, use that
+			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
+			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
+
+			//go to the larger priority, or go to the closest
+			if(signals[i].getPriority() > strongestSignal || (signals[i].getPriority() == strongestSignal && currentDistanceSqrd<distanceToClosest))
+			{
+				//set destination, reset distance
+				currentDestination = signals[i].getData();
+				strongestSignal=signals[i].getPriority();
+				distanceToClosest = currentDistanceSqrd;
+			}
+
+		}//get largest priority
+	}//for
+
+	//if a valid destination was found
+	if(strongestSignal > -1)
+		moveInDirection(currentDestination,frameTime);
+
+	//wander aimlessly
+	else
+	{
+		oldWanderAimlessly(frameTime);
 	}
 }
 
@@ -169,14 +395,24 @@ void Ant::update(float frameTime)
 
 		if(behavior == Behavior::DEFAULT)
 		{
-			defaultAction(frameTime);
+			if(age < antNS::YOUNG_AGE) youngDefaultAction(frameTime);//NEC - Young ant's default
+			else if(age < antNS::MIDDLE_AGE && age > antNS::YOUNG_AGE) middleDefaultAction(frameTime);//NEC - middle aged ant's default
+			else if (age > antNS::MIDDLE_AGE) oldDefaultAction(frameTime);//NEC - Old ant's default
 		}
 		if(behavior == Behavior::BEGGING)
 		{
 			hungryAction(frameTime);
 		}
-		
 
+		//NEC - Bring food back to queen
+		/*if(foodLevel > foodLevel * 0.80)
+		{
+			D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
+			if(species == RED) aim = *world->getRedCenter();
+			if(species == BLACK) aim = *world->getBlackCenter();
+			moveInDirection(aim,frameTime);
+		}
+*/
 		//reset signals
 		for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
 		{
@@ -301,11 +537,11 @@ void Ant::touches(Actor* other)
 
 float Ant::receiveFood(float avalible)
 {
-		float emptySpace = antNS::STOMACH_SIZE - foodLevel;
-		avalible = min(emptySpace,avalible);
-		foodLevel += avalible;
-		return avalible;
-		//
+	float emptySpace = antNS::STOMACH_SIZE - foodLevel;
+	avalible = min(emptySpace,avalible);
+	foodLevel += avalible;
+	return avalible;
+	//
 }
 
 void Ant::moveInDirection(VECTOR2 dir,float frameTime)
@@ -316,11 +552,14 @@ void Ant::moveInDirection(VECTOR2 dir,float frameTime)
 		//get vector from this to dest
 		dir -= *getCenter();
 		D3DXVec2Normalize(&dir,&dir);
-		dir *= antNS::ANT_SPEED*frameTime;
+
+		if(behavior == Behavior::BEGGING) dir *= antNS::ANT_SPEED*frameTime / 2;
+		else dir *= antNS::ANT_SPEED*frameTime;
+
 		setCenterLocation(*getCenter()+dir);
 		//point ant in direction
 		setRadians(atan2(dir.y,dir.x));
-		
+
 		//moving means an ant loses control of its pheromone
 		if(pher!=nullptr)
 			pher->setCenterLocation(*getCenter());

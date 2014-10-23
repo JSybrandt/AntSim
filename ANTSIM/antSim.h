@@ -9,13 +9,14 @@
 #include "food.h"
 #include "pheromone.h"
 #include "mouse.h"
+#include "Queen.h"
 
 //for collision rect
 #include<list>
 
 namespace antSimNS
 {
-	const int MAX_PHEROMONE = 1000;
+	const int MAX_PHEROMONE = 100;
 	const int MAX_ANTS = 100;
 	const int MAX_FOOD = 100;
 	const int STARTING_ANTS = 0;
@@ -53,6 +54,10 @@ private:
 	Pheromone pheromones[antSimNS::MAX_PHEROMONE];
 	Colony blackBase;
 	Colony redBase;
+	Queen blackQueen;//NEC
+	Queen redQueen;//NEC
+	Pheromone redPher;
+
 	Mouse mouse;
 	int antIndex;
 	int foodIndex;
@@ -86,4 +91,16 @@ public:
 	//call for static objects once, call for ants every frame
 	void placeObjectInProperRect(Actor* in);
 	void placeAntObjectInProperRect(Ant* in);
+
+	const D3DXVECTOR2* getRedCenter (){return redBase.getCenter();} //NEC
+	const D3DXVECTOR2* getBlackCenter (){return blackBase.getCenter();} //NEC
+
+	int getRedBaseX (){return redBase.getX();} //NEC
+	int getRedBaseY (){return redBase.getY();} //NEC
+
+	int getBlackBaseX (){return blackBase.getX();} //NEC
+	int getBlackBaseY (){return blackBase.getY();} //NEC
+
+
+
 };
