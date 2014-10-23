@@ -55,7 +55,7 @@ void Queen::hungryAction(float frameTime)
 	}
 	else{
 		pher->refresh();
-		pher->setSignal(Signal(SignalType::beg,*getCenter()));
+		pher->setSignal(Signal(SignalType::queen,*getCenter()));
 	}
 
 }
@@ -73,6 +73,16 @@ void Queen::defaultAction(float frameTime){
 	}*/
 	VECTOR2 location;
 	//Reproduce(location, species);
+
+	if(pher == nullptr)
+	{
+		pher = world->spawnPher(*getCenter(),Signal(SignalType::queen,*getCenter(),species));
+	}
+	else
+	{
+		pher->refresh();
+		pher->setSignal(Signal(SignalType::queen,*getCenter(),species));
+	}
 
 }
 
