@@ -26,144 +26,123 @@ Ant::~Ant() {
 
 void Ant::youngWanderAimlessly(float frameTime)
 {
-	//NEC - next 4 lines - checking positive distance from both bases: Then if statement will check whether ant can wander or must head back to base
-	int distanceFromBlackX = abs(world->getBlackBaseX() - getX());
-	int distanceFromBlackY = abs(world->getBlackBaseY() - getY());
-
-	int distanceFromRedX = abs(world->getRedBaseX() - getX());
-	int distanceFromRedY = abs(world->getRedBaseY() - getY());
+	VECTOR2 currentDestination(-1,-1);
+	float strongestSignal = -1;
+	float distanceToClosest = 999999999999999;
+	bool wander = true;
 
 	D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
-	D3DXVECTOR2 aim2(antNS::ANT_SPEED,0);
-	bool outOfBounds = false;
 
-	if((species == RED &&  distanceFromRedX < 300 && distanceFromRedY < 300) ||
-		(species == BLACK &&  distanceFromBlackX < 300 && distanceFromBlackY < 300))
+	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
 	{
-		//NEC - If in bounds of where a young ant should be -> wander
-		if(rand()%100>80)
+		//types of signals to consider
+		if((signals[i].getType()==SignalType::queen && signals[i].getSpecies()==species))
 		{
-			direction += ((rand()%10)/10.0)*PI/4 - PI/8;
-		}
-	}
-	else
-	{
-		outOfBounds = true;
+			//distance to queen
+			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
+			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
 
-		if(species == RED) aim2 = *world->getRedCenter();
-		if(species == BLACK) aim2 = *world->getBlackCenter();
-	}
+			//go to the larger priority, or go to the closest
+			if(currentDistanceSqrd < 200)//NEC if ant has enough food and signal is queen, go to her and deposit
+			{
+				if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/4 - PI/8;
+			}
+			else if (currentDistanceSqrd > 200)
+			{
+				wander = false;
+				aim = signals[i].getData();
+			}
 
-	//dont set new direction every frame
-
-	if(outOfBounds)
+		}//get largest priority
+	}//for
+	
+	if(strongestSignal > -1 && wander == false)
+		moveInDirection(currentDestination,frameTime);
+	else if(wander == true)
 	{
-		moveInDirection(aim2,frameTime);
-		direction *= -1;
-		//outOfBounds = false;
-	}
-	else
-	{
-		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
-		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
-		aim.x = nx; aim.y=ny;
-		aim += *getCenter();
 		moveInDirection(aim,frameTime);
 	}
 }
 
 void Ant::middleWanderAimlessly(float frameTime)
 {
-	//NEC - next 4 lines - checking positive distance from both bases: Then if statement will check whether ant can wander or must head back to base
-	int distanceFromBlackX = abs(world->getBlackBaseX() - getX());
-	int distanceFromBlackY = abs(world->getBlackBaseY() - getY());
-
-	int distanceFromRedX = abs(world->getRedBaseX() - getX());
-	int distanceFromRedY = abs(world->getRedBaseY() - getY());
+	VECTOR2 currentDestination(-1,-1);
+	float strongestSignal = -1;
+	float distanceToClosest = 999999999999999;
+	bool wander = true;
 
 	D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
-	D3DXVECTOR2 aim2(antNS::ANT_SPEED,0);
-	bool outOfBounds = false;
 
-	if((species == RED &&  distanceFromRedX < 150 && distanceFromRedY < 150) ||
-		(species == BLACK &&  distanceFromBlackX < 150 && distanceFromBlackY < 150))
+	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
 	{
-		//NEC - If in bounds of where a young ant should be -> wander
-		if(rand()%100>80)
+		//types of signals to consider
+		if((signals[i].getType()==SignalType::queen && signals[i].getSpecies()==species))
 		{
-			direction += ((rand()%10)/10.0)*PI/4 - PI/8;
-		}
-	}
-	else
-	{
-		outOfBounds = true;
+			//distance to queen
+			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
+			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
 
-		if(species == RED) aim2 = *world->getRedCenter();
-		if(species == BLACK) aim2 = *world->getBlackCenter();
-	}
+			//go to the larger priority, or go to the closest
+			if(currentDistanceSqrd < 50)//NEC if ant has enough food and signal is queen, go to her and deposit
+			{
+				if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/4 - PI/8;
+			}
+			else if (currentDistanceSqrd > 50)
+			{
+				wander = false;
+				aim = signals[i].getData();
+			}
 
-	//dont set new direction every frame
-
-	if(outOfBounds)
+		}//get largest priority
+	}//for
+	
+	if(strongestSignal > -1 && wander == false)
+		moveInDirection(currentDestination,frameTime);
+	else if(wander == true)
 	{
-		moveInDirection(aim2,frameTime);
-		direction *= -1;
-		//outOfBounds = false;
-	}
-	else
-	{
-		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
-		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
-		aim.x = nx; aim.y=ny;
-		aim += *getCenter();
 		moveInDirection(aim,frameTime);
 	}
 }
 
 void Ant::oldWanderAimlessly(float frameTime)
 {
-	//NEC - next 4 lines - checking positive distance from both bases: Then if statement will check whether ant can wander or must head back to base
-	int distanceFromBlackX = abs(world->getBlackBaseX() - getX());
-	int distanceFromBlackY = abs(world->getBlackBaseY() - getY());
-
-	int distanceFromRedX = abs(world->getRedBaseX() - getX());
-	int distanceFromRedY = abs(world->getRedBaseY() - getY());
+	VECTOR2 currentDestination(-1,-1);
+	float strongestSignal = -1;
+	float distanceToClosest = 999999999999999;
+	bool wander = true;
 
 	D3DXVECTOR2 aim(antNS::ANT_SPEED,0);
-	D3DXVECTOR2 aim2(antNS::ANT_SPEED,0);
-	bool outOfBounds = false;
 
-	if((species == RED &&  distanceFromRedX < 600 && distanceFromRedY < 600) ||
-		(species == BLACK &&  distanceFromBlackX < 600 && distanceFromBlackY < 600))
+	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
 	{
-		//NEC - If in bounds of where a young ant should be -> wander
-		if(rand()%100>80)
+		//types of signals to consider
+		if((signals[i].getType()==SignalType::queen && signals[i].getSpecies()==species))
 		{
-			direction += ((rand()%10)/10.0)*PI/4 - PI/8;
-		}
-	}
-	else
-	{
-		outOfBounds = true;
+			//distance to queen
+			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
+			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
 
-		if(species == RED) aim2 = *world->getRedCenter();
-		if(species == BLACK) aim2 = *world->getBlackCenter();
-	}
+			//go to the larger priority, or go to the closest
+			if(currentDistanceSqrd < 1000)
+			{
+				if(rand()%100>80)direction += ((rand()%10)/10.0)*PI/4 - PI/8;
+			}
+			else if (currentDistanceSqrd > 1000)
+			{
+				wander = false;
+				aim = signals[i].getData();
+			}
 
-	//dont set new direction every frame
-
-	if(outOfBounds)
+		}//get largest priority
+	}//for
+	
+	if(strongestSignal > -1 && wander == false)
 	{
-		moveInDirection(aim2,frameTime);
-		direction *= -1;
-		//outOfBounds = false;
+		moveInDirection(currentDestination,frameTime);
+		wander = true;
 	}
-	else
+	else if(wander == true)
 	{
-		float nx = cos(direction)*aim.x - sin(direction)*aim.y;
-		float ny = sin(direction)*aim.x + cos(direction)*aim.y;
-		aim.x = nx; aim.y=ny;
-		aim += *getCenter();
 		moveInDirection(aim,frameTime);
 	}
 }
@@ -237,18 +216,22 @@ void Ant::youngDefaultAction(float frameTime)
 	VECTOR2 currentDestination(-1,-1);
 	float strongestSignal = -1;
 	float distanceToClosest = 999999999999999;
+
 	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
 	{
 		//types of signals to consider
-		if(signals[i].getType()!=SignalType::null && signals[i].getSpecies()!=species)
+		if((signals[i].getType()!=SignalType::null && signals[i].getSpecies()!=species) && 
+			(signals[i].getType()!=SignalType::queen && signals[i].getSpecies()!=species))
 		{
 			//if the new signal is closer, use that
 			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
 			float currentDistanceSqrd = distToSignal.x*distToSignal.x + distToSignal.y*distToSignal.y;
 
 			//go to the larger priority, or go to the closest
-			if(signals[i].getPriority() > strongestSignal || (signals[i].getPriority() == strongestSignal && currentDistanceSqrd<distanceToClosest))
+			if(signals[i].getPriority() > strongestSignal || (signals[i].getPriority() == strongestSignal && currentDistanceSqrd<distanceToClosest) ||
+				(foodLevel > (0.8*antNS::STOMACH_SIZE) && signals[i].getType() == SignalType::queen))//NEC if ant has enough food and signal is queen, go to her and deposit
 			{
+				
 				//set destination, reset distance
 				currentDestination = signals[i].getData();
 				strongestSignal=signals[i].getPriority();
@@ -288,7 +271,8 @@ void Ant::middleDefaultAction(float frameTime)
 	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
 	{
 		//types of signals to consider
-		if(signals[i].getType()!=SignalType::null && signals[i].getSpecies()!=species)
+		if(signals[i].getType()!=SignalType::null && signals[i].getSpecies()!=species && 
+			(signals[i].getType()!=SignalType::queen && signals[i].getSpecies()!=species))
 		{
 			//if the new signal is closer, use that
 			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
@@ -336,7 +320,8 @@ void Ant::oldDefaultAction(float frameTime)
 	for(int i = 0 ; i < antNS::NUM_SIMULTANEOUS_SIGNALS; i++)
 	{
 		//types of signals to consider
-		if(signals[i].getType()!=SignalType::null && signals[i].getSpecies()!=species)
+		if(signals[i].getType()!=SignalType::null && signals[i].getSpecies()!=species && 
+			(signals[i].getType()!=SignalType::queen && signals[i].getSpecies()!=species))
 		{
 			//if the new signal is closer, use that
 			VECTOR2 distToSignal = signals[i].getData()-*getCenter();
