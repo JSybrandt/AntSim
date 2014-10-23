@@ -1,3 +1,12 @@
+/* 
+ Group #: Group 5
+ Members: Noah Cusimano, Seth Loew, Caelan Mayberry, Justin Sybrandt
+ Course: COMP 322, Advanced Programming 
+ Date: 30 August 2014 
+ Description: This file implements a component of the 
+ semester project, stage 2. 
+*/ 
+
 #include "pheromone.h"
 
 using namespace pheromoneNS;
